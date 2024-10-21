@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NetDetect - Admin Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f7f7f7;
+        }
+
+        header {
+            background-color: #007bff;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        main {
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .dashboard-section {
+            background-color: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .dashboard-section h2 {
+            margin-bottom: 15px;
+            font-size: 20px;
+            color: #333;
+        }
+
+        .stat-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #f0f8ff;
+            padding: 15px;
+            border-radius: 8px;
+            transition: background-color 0.3s ease;
+        }
+
+        .stat-card:hover {
+            background-color: #e0efff;
+        }
+
+        .stat-card strong {
+            font-size: 18px;
+        }
+
+        .stat-card p {
+            margin: 0;
+            font-size: 16px;
+        }
+
+        @media (max-width: 768px) {
+            main {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>NetDetect Dashboard</h1>
+</header>
+
+<main>
+    <div class="dashboard-section">
+        <h2>Connected Devices</h2>
+        <div class="stat-card">
+            <strong>Device 1:</strong>
+            <p>192.168.0.2</p>
+        </div>
+        <div class="stat-card">
+            <strong>Device 2:</strong>
+            <p>192.168.0.3</p>
+        </div>
+    </div>
+
+    <div class="dashboard-section">
+        <h2>Bandwidth Usage</h2>
+        <div class="stat-card">
+            <strong>Total Usage:</strong>
+            <p>500 MB</p>
+        </div>
+        <div class="stat-card">
+            <strong>Peak Usage:</strong>
+            <p>120 MB</p>
+        </div>
+    </div>
+
+    <div class="dashboard-section">
+        <h2>VLAN Traffic Monitoring</h2>
+        <div class="stat-card">
+            <strong>VLAN 1:</strong>
+            <p>200 MB</p>
+        </div>
+        <div class="stat-card">
+            <strong>VLAN 2:</strong>
+            <p>300 MB</p>
+        </div>
+    </div>
+</main>
+
+</body>
+</html>
