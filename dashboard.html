@@ -7,7 +7,8 @@
     <title>NetDetect - Admin Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-k6RqeWeci5ZR/Lv4MR0sA0FfDOM9H9N/5IF62yH2X9pQ5E7iIE2fF0f3SPL7y1F" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+        integrity="sha384-k6RqeWeci5ZR/Lv4MR0sA0FfDOM9H9N/5IF62yH2X9pQ5E7iIE2fF0f3SPL7y1F" crossorigin="anonymous">
     <style>
         * {
             margin: 0;
@@ -17,22 +18,34 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f0f2f5;
+            background-color: #f4f6f9;
+            color: #333;
+            line-height: 1.6;
+            transition: background-color 0.3s;
         }
 
         header {
-            background-color: #007bff;
-            color: white;
-            padding: 20px;
+            background-color: #0056b3;
+            padding: 15px 20px;
             text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        h4 {
+            color: white;
         }
 
         .sidebar {
-            background-color: #343a40;
+            background-color: #003d7a;
             color: white;
             padding: 20px;
-            border-radius: 0 12px 12px 0;
             height: 100vh;
+            position: sticky;
+            top: 0;
+            transition: transform 0.3s ease;
         }
 
         .sidebar a {
@@ -41,58 +54,42 @@
             margin: 10px 0;
             display: flex;
             align-items: center;
-            transition: color 0.3s ease;
+            padding: 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
         }
 
         .sidebar a:hover {
-            color: #007bff;
-        }
-
-        .sidebar a i {
-            margin-right: 10px;
+            background-color: #0056b3;
         }
 
         main {
             padding: 20px;
             flex-grow: 1;
+            overflow: hidden;
         }
 
         .dashboard-section {
-            background-color: white;
+            background-color: #ffffff;
             padding: 20px;
             border-radius: 12px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
             margin-bottom: 20px;
-        }
-
-        .dashboard-section h2 {
-            margin-bottom: 15px;
-            font-size: 24px;
-            color: #333;
         }
 
         .stat-card {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background-color: #e9ecef;
+            background-color: #f0f0f0;
             padding: 15px;
             border-radius: 8px;
             transition: background-color 0.3s ease;
+            margin-bottom: 10px;
         }
 
         .stat-card:hover {
-            background-color: #dee2e6;
-        }
-
-        .stat-card strong {
-            font-size: 20px;
-        }
-
-        .stat-card p {
-            margin: 0;
-            font-size: 18px;
-            color: #495057;
+            background-color: #e0e0e0;
         }
 
         .chart-container {
@@ -101,25 +98,36 @@
             margin-bottom: 20px;
         }
 
-        .audit-log, .notification-log {
-            max-height: 200px;
-            overflow-y: auto;
+        .loading {
+            display: none;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            font-size: 20px;
+            color: #0056b3;
         }
 
-        .notification-log {
-            max-height: 150px;
-            overflow-y: auto;
-            margin-bottom: 20px;
+        .dark-mode {
+            background-color: #333;
+            color: #fff;
+        }
+
+        .dark-mode header {
+            background-color: #222;
+        }
+
+        .dark-mode .sidebar {
+            background-color: #1a1a1a;
+        }
+
+        .dark-mode .stat-card {
+            background-color: #444;
         }
 
         @media (max-width: 768px) {
             .sidebar {
-                position: absolute;
-                height: auto;
                 width: 250px;
-                z-index: 1000;
                 transform: translateX(-100%);
-                transition: transform 0.3s ease;
             }
 
             .sidebar.show {
@@ -140,21 +148,22 @@
 <body>
 
     <header>
-        <h1>NetDetect Dashboard</h1>
-        <button class="btn btn-light sidebar-toggle" onclick="toggleSidebar()">
-            <i class="fas fa-bars"></i> Toggle Sidebar
-        </button>
+        <div class="d-flex justify-content-between align-items-center">
+            <h4>NetDetect Dashboard</h4>
+            <button class="btn btn-light" onclick="toggleDarkMode()"><i class="fas fa-moon"></i></button>
+        </div>
     </header>
 
     <div class="d-flex">
         <div class="sidebar" id="sidebar">
-            <h2 class="text-center">Menu</h2>
+            <h2 class="text-center mb-4">Menu</h2>
             <a href="#"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
-            <a href="#"><i class="fas fa-network-wired"></i> Networking Monitoring</a>
+            <a href="#"><i class="fas fa-network-wired"></i> Network Monitoring</a>
             <a href="#"><i class="fas fa-user-slash"></i> IP/MAC Blocking</a>
             <a href="#"><i class="fas fa-chart-line"></i> Bandwidth Tracking</a>
-            <a href="#"><i class="fas fa-bell"></i> Notifications</a>
+            <a href="#"><i class="fas fa-bell"></i> Notifications <span class="notification-badge">5</span></a>
             <a href="#"><i class="fas fa-cogs"></i> Settings</a>
+            <a href="#" onclick="showHelpModal()"><i class="fas fa-question-circle"></i> Help</a>
         </div>
 
         <main>
@@ -162,16 +171,17 @@
                 <h2>Connected Devices</h2>
                 <div class="stat-card">
                     <strong>Device 1:</strong>
-                    <p>192.168.0.2</p>
+                    <p>192.168.0.2 <span class="badge bg-success">Online</span></p>
                 </div>
                 <div class="stat-card">
                     <strong>Device 2:</strong>
-                    <p>192.168.0.3</p>
+                    <p>192.168.0.3 <span class="badge bg-danger">Offline</span></p>
                 </div>
             </div>
 
             <div class="dashboard-section">
                 <h2>Bandwidth Usage</h2>
+                <div class="loading" id="loadingBandwidth">Loading...</div>
                 <div class="chart-container">
                     <canvas id="bandwidthChart"></canvas>
                 </div>
@@ -187,6 +197,7 @@
 
             <div class="dashboard-section">
                 <h2>VLAN Traffic Monitoring</h2>
+                <div class="loading" id="loadingVLAN">Loading...</div>
                 <div class="chart-container">
                     <canvas id="vlanChart"></canvas>
                 </div>
@@ -206,9 +217,7 @@
                     <ul class="list-group">
                         <li class="list-group-item">192.168.0.10 blocked at 10:00 AM</li>
                         <li class="list-group-item">192.168.0.12 whitelisted at 10:05 AM</li>
-                        <li class="list-group-item">192.168.0.15 blocked at 10:10 AM</li>
-                        <li class="list-group-item">192.168.0.2 whitelisted at 10:15 AM</li>
-                        <li class="list-group-item">192.168.0.5 blocked at 10:20 AM</li>
+                        <li class="list-group-item">192.168.0.15 connected at 10:10 AM</li>
                     </ul>
                 </div>
             </div>
@@ -216,12 +225,10 @@
             <div class="dashboard-section">
                 <h2>Notifications</h2>
                 <div class="notification-log">
-                    <ul class="list-group">
+                    <ul class="list-group" id="notificationList">
                         <li class="list-group-item">Network check completed successfully.</li>
                         <li class="list-group-item">Device 192.168.0.10 has been blocked.</li>
-                        <li class="list-group-item">New firmware available for update.</li>
-                        <li class="list-group-item">Bandwidth usage is nearing the limit.</li>
-                        <li class="list-group-item">Device 192.168.0.12 has been whitelisted.</li>
+                        <li class="list-group-item">New firmware update available.</li>
                     </ul>
                 </div>
             </div>
@@ -233,9 +240,23 @@
             document.getElementById('sidebar').classList.toggle('show');
         }
 
-        // Sample data for charts
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+        }
+
+        function showHelpModal() {
+            alert("Help modal would appear here!");
+        }
+
         const ctx1 = document.getElementById('bandwidthChart').getContext('2d');
         const ctx2 = document.getElementById('vlanChart').getContext('2d');
+
+        const loadingBandwidth = document.getElementById('loadingBandwidth');
+        const loadingVLAN = document.getElementById('loadingVLAN');
+
+        // Show loading animation
+        loadingBandwidth.style.display = 'flex';
+        loadingVLAN.style.display = 'flex';
 
         const bandwidthChart = new Chart(ctx1, {
             type: 'line',
@@ -244,8 +265,8 @@
                 datasets: [{
                     label: 'Bandwidth Usage (MB)',
                     data: [120, 150, 200, 180, 220, 300],
-                    backgroundColor: 'rgba(0, 123, 255, 0.2)',
-                    borderColor: 'rgba(0, 123, 255, 1)',
+                    backgroundColor: 'rgba(0, 86, 179, 0.2)',
+                    borderColor: 'rgba(0, 86, 179, 1)',
                     borderWidth: 2,
                 }]
             },
@@ -253,7 +274,24 @@
                 responsive: true,
                 scales: {
                     y: {
-                        beginAtZero: true
+                        beginAtZero: true,
+                        grid: {
+                            color: '#ddd'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            color: '#ddd'
+                        }
+                    },
+                },
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function (context) {
+                                return context.dataset.label + ': ' + context.raw + ' MB';
+                            }
+                        }
                     }
                 }
             }
@@ -266,8 +304,8 @@
                 datasets: [{
                     label: 'Traffic (MB)',
                     data: [200, 300],
-                    backgroundColor: ['rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)'],
-                    borderColor: ['rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)'],
+                    backgroundColor: ['rgba(0, 86, 179, 0.2)', 'rgba(0, 123, 255, 0.2)'],
+                    borderColor: ['rgba(0, 86, 179, 1)', 'rgba(0, 123, 255, 1)'],
                     borderWidth: 2,
                 }]
             },
@@ -275,11 +313,40 @@
                 responsive: true,
                 scales: {
                     y: {
-                        beginAtZero: true
+                        beginAtZero: true,
+                        grid: {
+                            color: '#ddd'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            color: '#ddd'
+                        }
+                    },
+                },
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function (context) {
+                                return context.dataset.label + ': ' + context.raw + ' MB';
+                            }
+                        }
                     }
                 }
             }
         });
+
+        // Hide loading animation
+        loadingBandwidth.style.display = 'none';
+        loadingVLAN.style.display = 'none';
+
+        // Example: Simulate dynamic notifications
+        setInterval(() => {
+            const newNotification = document.createElement('li');
+            newNotification.className = 'list-group-item';
+            newNotification.textContent = `New alert at ${new Date().toLocaleTimeString()}`;
+            document.getElementById('notificationList').prepend(newNotification);
+        }, 5000);
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
