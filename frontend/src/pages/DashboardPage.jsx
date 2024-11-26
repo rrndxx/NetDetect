@@ -1,13 +1,13 @@
-import { useState, useEffect } from "react";
 import Sidebar from "../components/Sidebar.jsx";
 import Dashboard from "../components/Dashboard.jsx";
 import NetworkStatus from "../components/NetworkStatus.jsx";
 import DeviceManagement from "../components/DeviceManagement.jsx";
 import BandwidthMonitoring from "../components/BandwidthMonitoring.jsx";
 import Settings from "../components/Settings.jsx";
+import { useState, useEffect } from "react";
 import { auth } from "../firebase/firebase.js";
 import { onAuthStateChanged } from "firebase/auth";
-import { useNavigate, useNavigationType } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const DashboardPage = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
