@@ -1,14 +1,26 @@
-import { useState } from "react"; 
-import Sidebar from "../components/Sidebar.jsx"; 
-import Dashboard from "../components/Dashboard.jsx"; 
-import NetworkStatus from "../components/NetworkStatus.jsx"; 
-import DeviceManagement from "../components/DeviceManagement.jsx"; 
-import BandwidthMonitoring from "../components/BandwidthMonitoring.jsx"; 
-import Settings from "../components/Settings.jsx"; 
+import { useState, useEffect } from "react";
+import Sidebar from "../components/Sidebar.jsx";
+import Dashboard from "../components/Dashboard.jsx";
+import NetworkStatus from "../components/NetworkStatus.jsx";
+import DeviceManagement from "../components/DeviceManagement.jsx";
+import BandwidthMonitoring from "../components/BandwidthMonitoring.jsx";
+import Settings from "../components/Settings.jsx";
+import { auth } from "../firebase/firebase.js";
+import { onAuthStateChanged } from "firebase/auth";
+import { useNavigate, useNavigationType } from "react-router-dom";
 
 const DashboardPage = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [selectedButton, setSelectedButton] = useState("Dashboard");
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        navigate("/");
+      }
+    });
+  }, []);
 
   const handleSidebarButton = (button) => {
     setSelectedButton(button);
@@ -24,13 +36,13 @@ const DashboardPage = () => {
       case "Dashboard":
         return <Dashboard toggleSidebar={toggleSidebar} />;
       case "Network Status":
-        return <NetworkStatus />;
+        return <NetworkStatus toggleSidebar={toggleSidebar} />;
       case "Device Management":
-        return <DeviceManagement />;
+        return <DeviceManagement toggleSidebar={toggleSidebar} />;
       case "Bandwidth Monitoring":
-        return <BandwidthMonitoring />;
+        return <BandwidthMonitoring toggleSidebar={toggleSidebar} />;
       case "Settings":
-        return <Settings />;
+        return <Settings toggleSidebar={toggleSidebar} />;
       default:
         return <Dashboard toggleSidebar={toggleSidebar} />;
     }
