@@ -1,63 +1,58 @@
-import Sidebar from "../components/Sidebar.jsx";
-import Dashboard from "../components/Dashboard.jsx";
-import NetworkStatus from "../components/NetworkStatus.jsx";
-import DeviceManagement from "../components/DeviceManagement.jsx";
-import BandwidthMonitoring from "../components/BandwidthMonitoring.jsx";
-import Settings from "../components/Settings.jsx";
-import { useState, useEffect } from "react";
-import { auth } from "../firebase/firebase.js";
+import React, { useEffect, useState } from "react";
+import Sidebar from "../components/Sidebar";
+import Conditions from "../Main Contents/Conditions";
+import { FaBars } from "react-icons/fa";
+import { auth } from "../firebase/firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 
 const DashboardPage = () => {
+  const [activeMenu, setActiveMenu] = useState("dashboard");
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [selectedButton, setSelectedButton] = useState("Dashboard");
   const navigate = useNavigate();
+
+  const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (!user) {
-        navigate("/");
+        navigate("/login");
       }
     });
-  }, []);
-
-  const handleSidebarButton = (button) => {
-    setSelectedButton(button);
-  };
-
-  const toggleSidebar = () => {
-    setSidebarOpen(!sidebarOpen);
-  };
-
-  // Render the component based on the selected button
-  const renderContent = () => {
-    switch (selectedButton) {
-      case "Dashboard":
-        return <Dashboard toggleSidebar={toggleSidebar} />;
-      case "Network Status":
-        return <NetworkStatus toggleSidebar={toggleSidebar} />;
-      case "Device Management":
-        return <DeviceManagement toggleSidebar={toggleSidebar} />;
-      case "Bandwidth Monitoring":
-        return <BandwidthMonitoring toggleSidebar={toggleSidebar} />;
-      case "Settings":
-        return <Settings toggleSidebar={toggleSidebar} />;
-      default:
-        return <Dashboard toggleSidebar={toggleSidebar} />;
-    }
-  };
+  }, [navigate]);
 
   return (
-    <div className="flex min-h-screen bg-gray-900 text-white">
+    <div className="min-h-screen bg-[#121212] text-white flex">
       {/* Sidebar */}
       <Sidebar
-        isOpen={sidebarOpen}
+        onMenuClick={(menu) => {
+          setActiveMenu(menu);
+          setSidebarOpen(false); // Close sidebar on mobile after clicking
+        }}
+        activeMenu={activeMenu}
         toggleSidebar={toggleSidebar}
-        onButtonClick={handleSidebarButton}
+        sidebarOpen={sidebarOpen}
       />
-      {/* Main Content Area */}
-      <div className="flex-1">{renderContent()}</div>
+
+      {/* Main Content */}
+      <div className="flex-1 p-8">
+        {/* Mobile Sidebar Toggle */}
+        <div className="flex justify-start items-center mb-8">
+          <button
+            onClick={toggleSidebar}
+            className="text-2xl md:hidden text-[#00BFFF]"
+            aria-label="Toggle Sidebar"
+          >
+            <FaBars />
+          </button>
+          <h1 className="text-3xl font-semibold text-[#00BFFF] ms-4 capitalize">
+            {activeMenu.replace(/([A-Z])/g, " $1")} {/* Formats menu name */}
+          </h1>
+        </div>
+
+        {/* Dynamic Content */}
+        <Conditions activeMenu={activeMenu} />
+      </div>
     </div>
   );
 };

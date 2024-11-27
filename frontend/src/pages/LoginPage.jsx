@@ -35,9 +35,9 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-900 bg-cover bg-center">
-      <div className="px-12 py-10 rounded-xl shadow-2xl w-full max-w-sm transform hover:scale-105 transition duration-300 bg-gray-800">
-        <h1 className="text-3xl text-white font-semibold mb-8 text-center">
+    <div className="flex justify-center items-center min-h-screen bg-[#1a1a1a] bg-cover bg-center">
+      <div className="px-12 py-10 rounded-xl shadow-2xl w-full max-w-sm transform hover:scale-105 transition duration-300 bg-[#1a1a1a] ">
+        <h1 className="text-3xl text-[#00BFFF] font-semibold mb-8 text-center">
           Login
         </h1>
         <form onSubmit={handleSignin}>
@@ -47,7 +47,7 @@ const LoginPage = () => {
               type="email"
               id="email"
               placeholder="Email"
-              className="w-full px-4 py-2 border-b border-gray-500 bg-transparent text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#00d4ff] transition duration-200"
+              className="w-full px-4 py-2 border-b border-gray-500 bg-transparent text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#00BFFF] transition duration-200"
               required
               autoComplete="email"
               value={email}
@@ -60,7 +60,7 @@ const LoginPage = () => {
               type="password"
               id="password"
               placeholder="Password"
-              className="w-full px-4 py-2 border-b border-gray-500 bg-transparent text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#00d4ff] transition duration-200"
+              className="w-full px-4 py-2 border-b border-gray-500 bg-transparent text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#00BFFF] transition duration-200"
               required
               autoComplete="current-password"
               value={password}
@@ -72,7 +72,7 @@ const LoginPage = () => {
           {/* Login button */}
           <button
             type="submit"
-            className="w-full mt-4 bg-[#00d4ff] text-gray-900 py-2 rounded-md font-bold hover:bg-[#00a9d4] transition duration-200"
+            className="w-full mt-4 bg-[#00BFFF] text-gray-900 py-2 rounded-md font-bold hover:bg-[#00a9d4] transition duration-200"
             disabled={loading}
           >
             {loading ? "Logging in..." : "Login"}
@@ -82,7 +82,7 @@ const LoginPage = () => {
         <div className="text-end mt-4 text-sm">
           <a
             href="/forgot-password"
-            className="text-[#00d4ff] hover:text-[#00a9d4]"
+            className="text-[#00BFFF] hover:text-[#00a9d4] transition duration-300"
           >
             Forgot Password?
           </a>
