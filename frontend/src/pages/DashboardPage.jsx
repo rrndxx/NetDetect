@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Sidebar from "../components/Sidebar";
-import Conditions from "../Main Contents/Conditions";
+import Conditions from "../main contents/Conditions";
 import { FaBars } from "react-icons/fa";
 import { auth } from "../firebase/firebase";
 import { onAuthStateChanged } from "firebase/auth";
