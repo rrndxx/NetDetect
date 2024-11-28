@@ -9,6 +9,7 @@ import {
   FaTachometerAlt,
   FaSignOutAlt,
   FaChartLine,
+  FaBell
 } from "react-icons/fa";
 
 const Sidebar = ({ onMenuClick, activeMenu, toggleSidebar, sidebarOpen }) => {
@@ -28,6 +29,7 @@ const Sidebar = ({ onMenuClick, activeMenu, toggleSidebar, sidebarOpen }) => {
       icon: <FaTachometerAlt />,
       label: "Bandwidth Monitoring",
     },
+    { name: "notifications", icon: <FaBell />, label: "Notifications" },
     { name: "settings", icon: <FaCogs />, label: "Settings" },
   ];
 
