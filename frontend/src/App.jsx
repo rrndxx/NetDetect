@@ -1,4 +1,4 @@
-import DashboardPage from "./pages/DashboardPage";
+import MainContent from "./pages/MainContent";
 import LandingPage from "./pages/LandingPage";
 import LoginPage from "./pages/LoginPage";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
@@ -14,7 +14,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/dashboard" element={<DashboardPage />} />
+        <Route path="/main content" element={<MainContent />} />
       </Routes>
     </Router>
   );

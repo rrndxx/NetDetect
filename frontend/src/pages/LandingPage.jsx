@@ -8,14 +8,12 @@ const LandingPage = () => {
 
   return (
     <div className="font-sans bg-[#121212] text-white min-h-screen flex flex-col scroll-smooth">
-      {/* Navbar */}
       <nav className="bg-[#121212] p-4 sm:px-8 md:px-10 shadow-xl sticky top-0 z-20 transition-all duration-300 hover:shadow-2xl">
         <div className="container mx-auto flex justify-between items-center">
           <h1 className="text-3xl sm:text-4xl font-extrabold text-[#00BFFF] tracking-wide">
             NetDetect
           </h1>
 
-          {/* Desktop Navigation Links */}
           <div className="hidden md:flex space-x-10 items-center">
             <a
               href="#features"
@@ -39,7 +37,6 @@ const LandingPage = () => {
             </a>
           </div>
 
-          {/* Mobile Hamburger Icon */}
           <div className="md:hidden flex items-center">
             <button onClick={toggleMenu}>
               {menuOpen ? (
@@ -52,7 +49,6 @@ const LandingPage = () => {
         </div>
       </nav>
 
-      {/* Mobile Menu (Modal-style, below navbar) */}
       <div
         className={`${
           menuOpen ? "block" : "hidden"
@@ -84,9 +80,7 @@ const LandingPage = () => {
         </div>
       </div>
 
-      {/* Main Content Section */}
       <div className={`flex-grow ${menuOpen ? "mt-[140px]" : ""}`}>
-        {/* Hero Section */}
         <section className="text-center py-16 sm:py-32 bg-gradient-to-r from-[#121212] via-[#2a2a2a] to-[#1f1f1f] bg-cover bg-center relative">
           <div className="absolute inset-0 bg-black opacity-50"></div>
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold mb-4 sm:mb-6 text-[#00BFFF] tracking-wide relative z-10 shadow-lg">
@@ -106,7 +100,6 @@ const LandingPage = () => {
           </button>
         </section>
 
-        {/* Features Section */}  
         <section id="features" className="py-16 sm:py-24 bg-[#121212]">
           <div className="container mx-auto text-center">
             <h2 className="text-3xl sm:text-4xl text-[#00BFFF] font-extrabold mb-8 sm:mb-12">
@@ -168,7 +161,6 @@ const LandingPage = () => {
           </div>
         </section>
 
-        {/* Contact Section */}
         <section id="contact" className="bg-[#121212] py-16 sm:py-24">
           <div className="container mx-auto text-center">
             <h2 className="text-3xl sm:text-4xl text-[#00BFFF] font-extrabold mb-6 sm:mb-8">
@@ -178,7 +170,6 @@ const LandingPage = () => {
               Have any questions or need more information? We’re here to help!
             </p>
 
-            {/* Contact Form */}
             <form className="max-w-3xl mx-auto grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8">
               <input
                 type="email"
@@ -200,7 +191,6 @@ const LandingPage = () => {
         </section>
       </div>
 
-      {/* Footer */}
       <footer className="bg-[#121212] text-center py-6 mt-auto">
         <p>&copy; 2024 NetDetect. All Rights Reserved.</p>
         <div className="space-x-4 mt-4">

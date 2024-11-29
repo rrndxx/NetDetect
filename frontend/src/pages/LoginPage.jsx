@@ -41,7 +41,6 @@ const LoginPage = () => {
           Login
         </h1>
         <form onSubmit={handleSignin}>
-          {/* Email input */}
           <div className="mb-6">
             <input
               type="email"
@@ -54,7 +53,6 @@ const LoginPage = () => {
               onChange={(e) => setEmail(e.target.value)}
             />
           </div>
-          {/* Password input */}
           <div className="mb-6">
             <input
               type="password"
@@ -67,9 +65,7 @@ const LoginPage = () => {
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
-          {/* Error message */}
           {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
-          {/* Login button */}
           <button
             type="submit"
             className="w-full mt-4 bg-[#00BFFF] text-gray-900 py-2 rounded-md font-bold hover:bg-[#00a9d4] transition duration-200"
@@ -78,7 +74,6 @@ const LoginPage = () => {
             {loading ? "Logging in..." : "Login"}
           </button>
         </form>
-        {/* Forgot Password link */}
         <div className="text-end mt-4 text-sm">
           <a
             href="/forgot-password"

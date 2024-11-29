@@ -4,7 +4,6 @@ import subprocess
 import platform
 from concurrent.futures import ThreadPoolExecutor
 import uuid
-import requests
 
 
 def get_local_ip_range():
@@ -15,7 +14,7 @@ def get_local_ip_range():
         return f"{'.'.join(ip_parts)}.0/24"
     except Exception as e:
         print(f"Error retrieving local IP range: {e}")
-        return "192.168.1.0/24"  # Default fallback
+        return "192.168.1.0/24"  
 
 
 def populate_arp(ip_range):
@@ -78,25 +77,33 @@ def get_device_type(nm, ip_address):
     try:
         if ip_address in nm.all_hosts():
             if "osclass" in nm[ip_address]:
-                os_family = nm[ip_address]["osclass"][0].get("osfamily", "Unknown")
-                os_gen = nm[ip_address]["osclass"][0].get("osgen", "")
-                return f"{os_family} {os_gen}".strip()
+                os_classes = nm[ip_address]["osclass"]
+                if os_classes and isinstance(os_classes, list):
+                    os_family = os_classes[0].get("osfamily", "Unknown")
+                    os_gen = os_classes[0].get("osgen", "")
+                    return f"{os_family} {os_gen}".strip()
 
             if "vendor" in nm[ip_address]:
-                vendor = list(nm[ip_address]["vendor"].values())[0].lower()
-                if any(keyword in vendor for keyword in ["apple", "samsung"]):
-                    return "Mobile Phone"
-                if any(keyword in vendor for keyword in ["dell", "hp", "lenovo"]):
-                    return "Laptop/Desktop"
+                vendor = list(nm[ip_address]["vendor"].values())
+                if vendor:
+                    vendor_name = vendor[0].lower()
+                    if "apple" in vendor_name or "samsung" in vendor_name:
+                        return "Mobile Phone"
+                    if "dell" in vendor_name or "hp" in vendor_name or "lenovo" in vendor_name:
+                        return "Laptop/Desktop"
 
             if "osmatch" in nm[ip_address]:
-                for match in nm[ip_address]["osmatch"]:
-                    if "Android" in match["name"]:
-                        return "Android Phone"
-                    if "iOS" in match["name"]:
-                        return "iPhone"
-
+                os_matches = nm[ip_address]["osmatch"]
+                if os_matches and isinstance(os_matches, list):
+                    for match in os_matches:
+                        if "Android" in match.get("name", ""):
+                            return "Android Phone"
+                        if "iOS" in match.get("name", ""):
+                            return "iPhone"
+                        
             return "Unknown Device"
+    except KeyError as e:
+        print(f"Missing key in Nmap data for {ip_address}: {e}")
     except Exception as e:
         print(f"Error detecting device type for {ip_address}: {e}")
     return "Unknown"
@@ -117,7 +124,8 @@ def scan_host(ip_address):
         }
 
     try:
-        nm.scan(ip_address, arguments="-A -T4 --max-retries 1")
+        print(f"Scanning host: {ip_address}")
+        nm.scan(ip_address, arguments="-A -T4 --max-retries 3 --host-timeout 120s -Pn")
     except Exception as e:
         print(f"Scan failed for {ip_address}: {e}")
         return {
@@ -160,7 +168,7 @@ def scan_network(ip_range):
 
     nm = nmap.PortScanner()
     try:
-        nm.scan(hosts=ip_range, arguments="-sn -T4")
+        nm.scan(hosts=ip_range, arguments="-Pn -T4 --max-retries 3 --host-timeout 120s -p 80,443")
     except Exception as e:
         print(f"Network scan failed: {e}")
         return []
@@ -176,7 +184,6 @@ def scan_network(ip_range):
             except Exception as e:
                 print(f"Error scanning {futures[future]}: {e}")
 
-    # Retry missing devices
     devices += retry_scan_for_missing_devices(hosts, devices)
 
     return devices

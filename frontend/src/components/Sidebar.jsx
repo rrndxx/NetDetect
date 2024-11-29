@@ -40,7 +40,6 @@ const Sidebar = ({ onMenuClick, activeMenu, toggleSidebar, sidebarOpen }) => {
 
   return (
     <>
-      {/* Overlay for mobile */}
       {sidebarOpen && (
         <div
           className="fixed inset-0 bg-black opacity-50 z-10 md:hidden"
@@ -48,7 +47,6 @@ const Sidebar = ({ onMenuClick, activeMenu, toggleSidebar, sidebarOpen }) => {
         ></div>
       )}
 
-      {/* Sidebar */}
       <div
         className={`bg-[#1A1A1A] p-6 space-y-8 fixed md:relative z-20 w-64 h-full md:h-auto transition-all duration-300 ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
@@ -74,7 +72,6 @@ const Sidebar = ({ onMenuClick, activeMenu, toggleSidebar, sidebarOpen }) => {
           ))}
         </div>
 
-        {/* Logout Button */}
         <button
           onClick={() => setShowLogoutModal(true)}
           className="absolute bottom-6 left-6 flex items-center text-red-500 hover:text-red-700 w-[calc(100%-3rem)] text-left py-3 px-4 rounded-lg transition-colors"
@@ -83,7 +80,6 @@ const Sidebar = ({ onMenuClick, activeMenu, toggleSidebar, sidebarOpen }) => {
         </button>
       </div>
 
-      {/* Logout Confirmation Modal */}
       {showLogoutModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-30">
           <div className="bg-[#1A1A1A] text-black p-6 rounded-lg w-96">
