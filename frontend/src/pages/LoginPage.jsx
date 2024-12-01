@@ -23,7 +23,7 @@ const LoginPage = () => {
       );
       const user = userCredential.user;
       console.log(JSON.stringify(user, null, 2));
-      navigate("/dashboard");
+      navigate("/main content");
     } catch (err) {
       const errorCode = err.code;
       const errorMessage = err.message;
