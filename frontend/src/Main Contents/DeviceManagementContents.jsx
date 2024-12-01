@@ -19,6 +19,9 @@ const DeviceManagementContents = () => {
     };
 
     fetchDevices();
+    const intervalId = setInterval(fetchDevices, 60000); // Fetch devices every 60 seconds
+
+    return () => clearInterval(intervalId); // Cleanup on unmount
   }, []);
 
   if (loading) return <p className="text-gray-400">Loading devices...</p>;
