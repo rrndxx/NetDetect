@@ -187,24 +187,3 @@ def scan_network(ip_range):
     devices += retry_scan_for_missing_devices(hosts, devices)
 
     return devices
-
-
-def display_devices(devices):
-    """Display the scanned devices."""
-    print(f"{'Hostname':<30} {'IP Address':<20} {'MAC Address':<20} {'Device Type':<15}")
-    print("=" * 90)
-    for device in devices:
-        print(f"{device.get('hostname', 'N/A'):<30} {device.get('ip_address', 'N/A'):<20} "
-              f"{device.get('mac_address', 'N/A'):<20} {device.get('device_type', 'N/A'):<15}")
-    print(f"\nTotal devices detected: {len(devices)}")
-
-
-def main():
-    """Main function to execute the network scanner."""
-    ip_range = get_local_ip_range()
-    devices = scan_network(ip_range)
-    display_devices(devices)
-
-
-if __name__ == "__main__":
-    main()

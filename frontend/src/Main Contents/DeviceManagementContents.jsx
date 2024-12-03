@@ -19,9 +19,9 @@ const DeviceManagementContents = () => {
     };
 
     fetchDevices();
-    const intervalId = setInterval(fetchDevices, 60000); // Fetch devices every 60 seconds
+    const intervalId = setInterval(fetchDevices, 60000);
 
-    return () => clearInterval(intervalId); // Cleanup on unmount
+    return () => clearInterval(intervalId);
   }, []);
 
   if (loading) return <p className="text-gray-400">Loading devices...</p>;
@@ -29,14 +29,9 @@ const DeviceManagementContents = () => {
 
   return (
     <div className="bg-[#1A1A1A] p-6 rounded-lg shadow-md">
-      <div className="flex justify-between mx-4">
-        <h3 className="text-xl font-semibold text-[#00BFFF]">
-          Device Management
-        </h3>
-        <p className="text-sm text-gray-400">
-          Devices Connected: {devices.length}
-        </p>
-      </div>
+      <p className="text-sm text-gray-400">
+        Devices Connected: {devices.length}
+      </p>
       <table className="w-full mt-4 text-left text-sm text-gray-300">
         <thead>
           <tr className="border-b border-gray-700">

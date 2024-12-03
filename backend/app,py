@@ -2,13 +2,63 @@ from flask import Flask, jsonify
 from flask_cors import CORS
 from threading import Thread
 import time
+import speedtest
+import psutil
+import socket
+import requests
+import asyncio
 from get_devices import scan_network, get_local_ip_range
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/api/*": {"origins": "*"}})
 
-# Global variable to store the devices
+# Global variables to store the devices and network status
 devices_list = []
+network_status_data = {}
+
+
+# Function to perform speed test
+def run_speedtest():
+    try:
+        st = speedtest.Speedtest()
+        st.get_best_server()
+        download_speed = st.download() / 1_000_000  # Convert to Mbps
+        upload_speed = st.upload() / 1_000_000  # Convert to Mbps
+        ping = st.results.ping
+        return download_speed, upload_speed, ping
+    except Exception as e:
+        print(f"Speedtest error: {e}")
+        return None, None, None
+
+
+# Function to get network interface information
+def get_network_info():
+    network_info = {}
+    try:
+        hostname = socket.gethostname()
+        local_ip = socket.gethostbyname(hostname)
+
+        # Get MAC address and IP from each interface
+        for interface, addrs in psutil.net_if_addrs().items():
+            for addr in addrs:
+                if addr.family == socket.AF_INET:
+                    network_info["IP"] = addr.address
+                elif addr.family == psutil.AF_LINK:
+                    network_info["MAC Address"] = addr.address
+
+        # Get External IP
+        try:
+            external_ip = requests.get("https://api.ipify.org", timeout=5).text
+        except requests.RequestException:
+            external_ip = "Unable to fetch external IP"
+
+        network_info["Local IP"] = local_ip
+        network_info["External IP"] = external_ip
+    except Exception as e:
+        print(f"Error fetching network info: {e}")
+
+    return network_info
+
 
 # Function to run the scan continuously in the background
 def continuous_scan():
@@ -20,9 +70,34 @@ def continuous_scan():
             devices_list = devices  # Update the global devices list
         except Exception as e:
             print(f"Error during scan: {e}")
-        time.sleep(60)  # Run the scan every 60 seconds
+        time.sleep(60)  # Scan every 60 seconds (reduced time interval)
 
-@app.route('/api/devices', methods=['GET'])
+
+# Async function to fetch network status and perform speed test
+async def fetch_network_status():
+    download_speed, upload_speed, ping = await asyncio.to_thread(run_speedtest)
+    network_info = await asyncio.to_thread(get_network_info)
+    return {
+        "status": "success",
+        "download_speed": download_speed,
+        "upload_speed": upload_speed,
+        "ping": ping,
+        "network_info": network_info,
+    }
+
+
+# Function to continuously update network status
+async def continuous_network_status():
+    while True:
+        try:
+            global network_status_data
+            network_status_data = await fetch_network_status()
+        except Exception as e:
+            print(f"Error during network status update: {e}")
+        await asyncio.sleep(60)  # Non-blocking async sleep
+
+
+@app.route("/api/devices", methods=["GET"])
 def get_devices():
     try:
         # Return the devices that were last scanned
@@ -30,10 +105,28 @@ def get_devices():
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500
 
-if __name__ == '__main__':
+
+@app.route("/api/network-status", methods=["GET"])
+def get_network_status():
+    try:
+        # Return the latest network status
+        return jsonify(network_status_data), 200
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
+
+
+if __name__ == "__main__":
     # Start the continuous scan in a background thread when the app starts
     scan_thread = Thread(target=continuous_scan)
     scan_thread.daemon = True
     scan_thread.start()
-    
-    app.run(debug=True, host='0.0.0.0', port=5000)
+
+    # Start the continuous network status update in a background thread
+    network_status_thread = Thread(target=continuous_network_status)
+    network_status_thread.daemon = True
+    network_status_thread.start()
+
+    # Start the Flask app
+    app.run(
+        debug=True, host="0.0.0.0", port=5000, use_reloader=False
+    )  # Use reloader=False to avoid thread issues with Flask reloader

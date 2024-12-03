@@ -42,7 +42,7 @@ const MainContent = () => {
           >
             <FaBars />
           </button>
-          <h1 className="text-3xl font-semibold text-[#00BFFF] ms-4 capitalize">
+          <h1 className="text-3xl text-center font-semibold text-[#00BFFF] ms-4 capitalize">
             {activeMenu.replace(/([A-Z])/g, " $1")} 
           </h1>
         </div>
