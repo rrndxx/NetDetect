@@ -17,7 +17,7 @@ const Conditions = ({ activeMenu }) => {
       case "settings":
         return <SettingsContents />;
       default:
-        return <div>No content available</div>;
+        return <div className="text-center text-gray-400">No content available</div>;
     }
   };
 

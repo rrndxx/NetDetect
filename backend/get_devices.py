@@ -14,7 +14,7 @@ def get_local_ip_range():
         return f"{'.'.join(ip_parts)}.0/24"
     except Exception as e:
         print(f"Error retrieving local IP range: {e}")
-        return "192.168.1.0/24"  
+        return "192.168.1.0/24"
 
 
 def populate_arp(ip_range):
@@ -22,7 +22,11 @@ def populate_arp(ip_range):
     print("Populating ARP cache...")
     try:
         if platform.system() == "Windows":
-            subprocess.run(f"ping -n 1 {ip_range.split('/')[0]}", shell=True, stdout=subprocess.PIPE)
+            subprocess.run(
+                f"ping -n 1 {ip_range.split('/')[0]}",
+                shell=True,
+                stdout=subprocess.PIPE,
+            )
         else:
             subprocess.run(f"nmap -sn {ip_range}", shell=True, stdout=subprocess.PIPE)
     except Exception as e:
@@ -46,7 +50,11 @@ def retry_arp_for_missing_mac(ip_address):
     """Retry ARP request for a specific IP to fetch its MAC address."""
     print(f"Retrying ARP for IP: {ip_address}")
     try:
-        ping_command = f"ping -n 1 {ip_address}" if platform.system() == "Windows" else f"ping -c 1 {ip_address}"
+        ping_command = (
+            f"ping -n 1 {ip_address}"
+            if platform.system() == "Windows"
+            else f"ping -c 1 {ip_address}"
+        )
         subprocess.run(ping_command, shell=True, stdout=subprocess.PIPE)
         return get_mac_from_arp(ip_address)
     except Exception as e:
@@ -66,7 +74,7 @@ def get_host_mac():
     """Retrieve the MAC address of the host device."""
     try:
         mac = uuid.getnode()
-        return ':'.join(f"{(mac >> ele) & 0xff:02x}" for ele in range(40, -1, -8))
+        return ":".join(f"{(mac >> ele) & 0xff:02x}" for ele in range(40, -1, -8))
     except Exception as e:
         print(f"Failed to retrieve host MAC: {e}")
         return "N/A"
@@ -89,7 +97,11 @@ def get_device_type(nm, ip_address):
                     vendor_name = vendor[0].lower()
                     if "apple" in vendor_name or "samsung" in vendor_name:
                         return "Mobile Phone"
-                    if "dell" in vendor_name or "hp" in vendor_name or "lenovo" in vendor_name:
+                    if (
+                        "dell" in vendor_name
+                        or "hp" in vendor_name
+                        or "lenovo" in vendor_name
+                    ):
                         return "Laptop/Desktop"
 
             if "osmatch" in nm[ip_address]:
@@ -100,7 +112,7 @@ def get_device_type(nm, ip_address):
                             return "Android Phone"
                         if "iOS" in match.get("name", ""):
                             return "iPhone"
-                        
+
             return "Unknown Device"
     except KeyError as e:
         print(f"Missing key in Nmap data for {ip_address}: {e}")
@@ -168,7 +180,10 @@ def scan_network(ip_range):
 
     nm = nmap.PortScanner()
     try:
-        nm.scan(hosts=ip_range, arguments="-Pn -T4 --max-retries 3 --host-timeout 120s -p 80,443")
+        nm.scan(
+            hosts=ip_range,
+            arguments="-Pn -T4 --max-retries 3 --host-timeout 120s -p 80,443",
+        )
     except Exception as e:
         print(f"Network scan failed: {e}")
         return []

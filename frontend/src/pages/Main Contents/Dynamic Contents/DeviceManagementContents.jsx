@@ -24,8 +24,8 @@ const DeviceManagementContents = () => {
     return () => clearInterval(intervalId);
   }, []);
 
-  if (loading) return <p className="text-gray-400">Loading devices...</p>;
-  if (error) return <p className="text-red-500">{error}</p>;
+  if (loading) return <p className="text-gray-400 text-center animate-pulse">Loading...</p>;
+  if (error) return <p className="text-red-500 text-center">{error}</p>;
 
   return (
     <div className="bg-[#1A1A1A] p-6 rounded-lg shadow-md">

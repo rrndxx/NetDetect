@@ -1,7 +1,7 @@
-import MainContent from "./pages/MainContent";
-import LandingPage from "./pages/LandingPage";
+import MainContent from "./pages/Main Contents/MainContent";
 import LoginPage from "./pages/LoginPage";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import LandingPage from "./pages/Landing Page Contents/LandingPage";
 
 const App = () => {
   return (

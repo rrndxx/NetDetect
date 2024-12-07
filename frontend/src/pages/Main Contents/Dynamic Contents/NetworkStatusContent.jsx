@@ -4,6 +4,7 @@ import { FaDownload, FaUpload, FaWifi } from "react-icons/fa";
 const NetworkStatusContent = () => {
   const [networkStatus, setNetworkStatus] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
   const intervalRef = useRef(null);
 
   const fetchNetworkStatus = async () => {
@@ -23,6 +24,7 @@ const NetworkStatusContent = () => {
       console.error("Error fetching network status:", error);
       setNetworkStatus(null);
       setLoading(false);
+      setError(error.message);
     }
   };
 
@@ -40,17 +42,22 @@ const NetworkStatusContent = () => {
 
   if (loading) {
     return (
-      <div className="bg-[#1A1A1A] p-6 rounded-lg shadow-lg animate-pulse">
-        <h1 className="text-1xl text-center text-gray-400">Loading...</h1>
-      </div>
+      <h1 className="text-1xl text-center text-gray-400 animate-pulse">
+        Loading...
+      </h1>
     );
+  }
+
+  if (error) {
+    return <p className="text-red-500 text-center">{error}</p>; 
   }
 
   if (!networkStatus) {
     return (
       <div className="bg-[#1A1A1A] p-6 rounded-lg shadow-lg">
-        <h3 className="text-xl font-semibold text-[#00BFFF]">Network Status</h3>
-        <p className="text-sm text-gray-400">Failed to load network status.</p>
+        <p className="text-red-500 text-center">
+          Unable to retrieve network status.
+        </p>
       </div>
     );
   }
