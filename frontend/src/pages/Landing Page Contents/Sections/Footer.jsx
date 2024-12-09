@@ -19,7 +19,7 @@ const Footer = () => (
           className="text-[#00BFFF] hover:text-white transition duration-300"
           aria-label={label}
         >
-          <i className={`${icon} text-2xl`} />
+          <i className={`${icon} text-2xl hover:scale-125`} />
         </a>
       ))}
     </div>

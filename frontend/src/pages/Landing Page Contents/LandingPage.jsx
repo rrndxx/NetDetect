@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import HeroSection from "./Sections/HeroSection";
 import FeatureSection from "./Sections/FeatureSection";
 import Footer from "./Sections/Footer";
+import BenefitsSection from "./Sections/BenefitsSection";
 
 const LandingPage = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -30,8 +31,14 @@ const LandingPage = () => {
             >
               Features
             </a>
+            <a
+              href="#benefits"
+              className="text-md sm:text-lg hover:text-[#00BFFF] transition duration-300"
+            >
+              Benefits
+            </a>
             <button
-              className="bg-gradient-to-r from-blue-500 to-blue-700 text-gray-900 px-6 py-3 rounded-lg text-lg sm:text-xl hover:scale-105 transition duration-200"
+              className="bg-gradient-to-r from-blue-500 to-blue-700 text-gray-900 px-6 py-3 rounded-md shadow-lg text-lg sm:text-xl hover:scale-105 transition duration-200"
               onClick={() => navigate("/login")}
             >
               Login
@@ -52,7 +59,7 @@ const LandingPage = () => {
       {menuOpen && (
         <div
           id="mobile-menu"
-          className="md:hidden fixed top-16 left-0 w-full bg-transparent backdrop-blur-md py-6 z-30 shadow-xl"
+          className="md:hidden fixed top-16 left-0 w-full bg-transparent backdrop-blur-md py-4 z-30 shadow-xl"
         >
           <div className="flex flex-col gap-6 justify-center items-center">
             <a
@@ -69,6 +76,13 @@ const LandingPage = () => {
             >
               Features
             </a>
+            <a
+              href="#benefits"
+              className="text-lg hover:text-[#00a1e0] transition duration-300 w-full text-center"
+              onClick={toggleMenu}
+            >
+              Benefits
+            </a>
             <button
               className="bg-gradient-to-r from-blue-500 to-blue-700 text-gray-900 px-6 py-3 rounded-lg text-lg hover:scale-105 transition duration-200"
               onClick={() => navigate("/login")}
@@ -83,6 +97,7 @@ const LandingPage = () => {
       <main className={`flex-grow ${menuOpen ? "mt-[140px]" : ""}`}>
         <HeroSection />
         <FeatureSection />
+        <BenefitsSection />
       </main>
 
       {/* Footer */}

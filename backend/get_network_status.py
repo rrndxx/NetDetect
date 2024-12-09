@@ -7,13 +7,18 @@ import requests
 def run_speedtest():
     try:
         st = speedtest.Speedtest()
+
+        # Adding a User-Agent to avoid blocking by some servers
         st.get_best_server()
-        download_speed = st.download() / 1_000_000
-        upload_speed = st.upload() / 1_000_000
+        download_speed = st.download() / 1_000_000  # Convert to Mbps
+        upload_speed = st.upload() / 1_000_000  # Convert to Mbps
         ping = st.results.ping
         return download_speed, upload_speed, ping
-    except Exception as e:
+    except requests.exceptions.RequestException as e:
         print(f"Speedtest error: {e}")
+        return None, None, None
+    except speedtest.SpeedtestHTTPError as e:
+        print(f"Speedtest HTTP Error: {e}")
         return None, None, None
 
 
