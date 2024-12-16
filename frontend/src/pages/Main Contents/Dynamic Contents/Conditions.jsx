@@ -2,7 +2,6 @@ import BandwidthMonitoringContents from "./BandwidthMonitoringContents";
 import DashboardContent from "./DashboardContent";
 import DeviceManagementContents from "./DeviceManagementContents";
 import NetworkStatusContent from "./NetworkStatusContent";
-import SettingsContents from "./SettingsContents";
 const Conditions = ({ activeMenu }) => {
   const content = () => {
     switch (activeMenu) {
@@ -14,10 +13,10 @@ const Conditions = ({ activeMenu }) => {
         return <DeviceManagementContents />;
       case "bandwidthMonitoring":
         return <BandwidthMonitoringContents />;
-      case "settings":
-        return <SettingsContents />;
       default:
-        return <div className="text-center text-gray-400">No content available</div>;
+        return (
+          <div className="text-center text-gray-400">No content available</div>
+        );
     }
   };
 

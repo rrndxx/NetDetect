@@ -4,57 +4,82 @@ import { FaDownload, FaUpload, FaWifi } from "react-icons/fa";
 const NetworkStatusContent = () => {
   const [networkStatus, setNetworkStatus] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [error, setError] = useState(null);
+  const [attempts, setAttempts] = useState(0);
   const intervalRef = useRef(null);
 
+  // Function to fetch the network status
   const fetchNetworkStatus = async () => {
     try {
+      setError(null); // Reset the error state
       const response = await fetch("http://localhost:5000/api/network-status");
+
       if (!response.ok) {
         throw new Error(`Failed to fetch: ${response.statusText}`);
       }
+
       const data = await response.json();
+      console.log("Response from API:", data);
+
       if (data.status === "success") {
-        setNetworkStatus(data);
-        setLoading(false);
+        setNetworkStatus(data); // Set the network status
+        setLoading(false); // Mark loading as false
+      } else if (data.status === "loading") {
+        console.log("Network status is still loading...");
+        if (attempts < 5) {
+          setAttempts((prev) => prev + 1); // Increment attempts for retries
+          setTimeout(fetchNetworkStatus, 5000); // Retry after 5 seconds
+        } else {
+          throw new Error("Network status taking too long to fetch.");
+        }
       } else {
-        throw new Error("Network status is unavailable.");
+        throw new Error(data.message || "Network status is unavailable.");
       }
     } catch (error) {
       console.error("Error fetching network status:", error);
-      setNetworkStatus(null);
-      setLoading(false);
       setError(error.message);
+      setNetworkStatus(null);
+      setLoading(false); // Stop loading when error occurs
     }
   };
 
   useEffect(() => {
-    fetchNetworkStatus();
+    fetchNetworkStatus(); // Initial fetch on component mount
 
+    // Set an interval to refresh network status every 10 seconds
     intervalRef.current = setInterval(() => {
       fetchNetworkStatus();
-    }, 10000);
+    }, 5000);
 
     return () => {
-      clearInterval(intervalRef.current);
+      clearInterval(intervalRef.current); // Cleanup on unmount
     };
   }, []);
 
+  // If still loading, display a loading message
   if (loading) {
     return (
       <h1 className="text-1xl text-center text-gray-400 animate-pulse">
-        Loading...
+        Loading network status...
       </h1>
     );
   }
 
+  // If there is an error, display the error message
   if (error) {
-    return <p className="text-red-500 text-center">{error}</p>; 
+    return (
+      <div className="bg-transparent p-6 rounded-lg shadow-lg">
+        <p className="text-red-500 text-center animate-pulse">
+          Error: {error}. Retrying in 5 seconds...
+        </p>
+      </div>
+    );
   }
 
+  // If no network status is available, display a fallback message
   if (!networkStatus) {
     return (
-      <div className="bg-[#1A1A1A] p-6 rounded-lg shadow-lg">
+      <div className="bg-transparent p-6 rounded-lg shadow-lg">
         <p className="text-red-500 text-center">
           Unable to retrieve network status.
         </p>
@@ -62,8 +87,16 @@ const NetworkStatusContent = () => {
     );
   }
 
+  // Destructure the data from the network status
+  const {
+    download_speed,
+    upload_speed,
+    ping,
+    network_info = {},
+  } = networkStatus;
+
   return (
-    <div className="bg-[#1A1A1A] p-6 rounded-lg shadow-lg">
+    <div className="bg-transparent p-6 rounded-lg shadow-lg">
       <h1 className="text-xl font-semibold text-[#00BFFF] w-full sm:w-auto">
         Status: <span className="font-semibold text-green-500">Online</span>
       </h1>
@@ -72,23 +105,23 @@ const NetworkStatusContent = () => {
       {/* Network Speed Section */}
       <div className="mt-4 space-y-4 text-sm text-gray-400">
         <div className="flex items-center space-x-3">
-          <FaDownload className="text-[#00BFFF]" />
+          <FaDownload className="text-[#00BFFF] animate-pulse" />
           <p>
             <strong>Download Speed:</strong>{" "}
-            {networkStatus.download_speed.toFixed(2)} Mbps
+            {download_speed ? download_speed.toFixed(2) : "Loading..."} Mbps
           </p>
         </div>
         <div className="flex items-center space-x-3">
-          <FaUpload className="text-[#00BFFF]" />
+          <FaUpload className="text-[#00BFFF] animate-pulse" />
           <p>
             <strong>Upload Speed:</strong>{" "}
-            {networkStatus.upload_speed.toFixed(2)} Mbps
+            {upload_speed ? upload_speed.toFixed(2) : "Loading..."} Mbps
           </p>
         </div>
         <div className="flex items-center space-x-3">
-          <FaWifi className="text-[#00BFFF]" />
+          <FaWifi className="text-[#00BFFF] animate-pulse" />
           <p>
-            <strong>Ping:</strong> {networkStatus.ping} ms
+            <strong>Ping:</strong> {ping ?? "Loading..."} msF
           </p>
         </div>
       </div>
@@ -99,18 +132,18 @@ const NetworkStatusContent = () => {
           Network Information
         </h2>
         <p>
-          <strong>Local IP:</strong> {networkStatus.network_info["Local IP"]}
+          <strong>Local IP:</strong> {network_info["Local IP"] || "Loading..."}
         </p>
         <p>
           <strong>External IP:</strong>{" "}
-          {networkStatus.network_info["External IP"]}
+          {network_info["External IP"] || "Loading..."}
         </p>
         <p>
           <strong>MAC Address:</strong>{" "}
-          {networkStatus.network_info["MAC Address"]}
+          {network_info["MAC Address"] || "Loading..."}
         </p>
         <p>
-          <strong>IP Address:</strong> {networkStatus.network_info["IP"]}
+          <strong>IP Address:</strong> {network_info["IP"] || "Loading..."}
         </p>
       </div>
     </div>

@@ -1,42 +1,10 @@
 import React from "react";
-
-const features = [
-  {
-    title: "Centralized Admin Dashboard",
-    description: "Manage all networks from a single, intuitive dashboard.",
-    icon: "fas fa-tachometer-alt",
-  },
-  {
-    title: "Network Monitoring",
-    description: "Real-time updates on network traffic and connected devices.",
-    icon: "fas fa-network-wired",
-  },
-  {
-    title: "IP/MAC Address Authorization",
-    description: "Quickly authorize or block unauthorized devices.",
-    icon: "fas fa-lock",
-  },
-  {
-    title: "Bandwidth Usage Tracking",
-    description: "Track and manage bandwidth usage to prevent overuse.",
-    icon: "fas fa-chart-line",
-  },
-  {
-    title: "Mobile Responsiveness",
-    description: "Access the dashboard from your mobile device anywhere.",
-    icon: "fas fa-mobile-alt",
-  },
-  {
-    title: "Notifications",
-    description: "Receive alerts for critical network events in real-time.",
-    icon: "fas fa-bell",
-  },
-];
+import { features } from "../../../constants/constants.jsx";
 
 const FeatureSection = () => (
   <section
     id="features"
-    className="py-14 sm:py-20 md:py-24 px-4 sm:px-8 lg:px-24 bg-gradient-to-r from-gray-800 to-gray-900"
+    className="py-14 sm:py-18 px-4 sm:px-6 lg:px-24 bg-gradient-to-r from-gray-800 to-gray-900"
   >
     <div className="container mx-auto text-center">
       <h3 className="text-2xl sm:text-4xl md:text-5xl text-[#00BFFF] mb-12 tracking-wide drop-shadow-lg">
@@ -57,7 +25,7 @@ const FeatureSection = () => (
             </h3>
             <p className="text-md leading-relaxed text-gray-300">
               {feature.description}
-            </p>  
+            </p>
           </div>
         ))}
       </div>

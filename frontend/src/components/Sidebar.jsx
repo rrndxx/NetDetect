@@ -1,36 +1,12 @@
 import React, { useState } from "react";
 import { auth } from "../firebase/firebase";
 import { useNavigate } from "react-router-dom";
-import {
-  FaCogs,
-  FaWifi,
-  FaMobileAlt,
-  FaTachometerAlt,
-  FaSignOutAlt,
-  FaChartLine,
-  FaBell,
-} from "react-icons/fa";
+import { FaSignOutAlt } from "react-icons/fa";
+import { menuItems } from "../constants/constants.jsx";
 
 const Sidebar = ({ onMenuClick, activeMenu, toggleSidebar, sidebarOpen }) => {
   const navigate = useNavigate();
   const [showLogoutModal, setShowLogoutModal] = useState(false);
-
-  const menuItems = [
-    { name: "dashboard", icon: <FaChartLine />, label: "Dashboard" },
-    { name: "networkStatus", icon: <FaWifi />, label: "Network Status" },
-    {
-      name: "deviceManagement",
-      icon: <FaMobileAlt />,
-      label: "Device Management",
-    },
-    {
-      name: "bandwidthMonitoring",
-      icon: <FaTachometerAlt />,
-      label: "Bandwidth Monitoring",
-    },
-    { name: "notifications", icon: <FaBell />, label: "Notifications" },
-    { name: "settings", icon: <FaCogs />, label: "Settings" },
-  ];
 
   const handleLogout = () => {
     auth.signOut();
@@ -47,16 +23,14 @@ const Sidebar = ({ onMenuClick, activeMenu, toggleSidebar, sidebarOpen }) => {
       )}
 
       <div
-        className={`bg-transarent shadow-lg p-6 space-y-8 backdrop-blur-md fixed md:relative z-20 w-64 h-full md:h-auto transition-all duration-300 transform ${
+        className={`bg-transarent shadow-lg p-6 space-y-8 backdrop-blur-md fixed md:relative z-20 w-64 min-h-screen transition-all duration-300 transform ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
         }`}
       >
-        {/* Sidebar Header */}
         <h2 className="text-2xl font-semibold text-[#00BFFF] mb-10 mt-2 text-center">
           NetDetect
         </h2>
 
-        {/* Menu Items */}
         <div className="space-y-6">
           {menuItems.map((menu) => (
             <button
@@ -74,7 +48,6 @@ const Sidebar = ({ onMenuClick, activeMenu, toggleSidebar, sidebarOpen }) => {
           ))}
         </div>
 
-        {/* Logout Button */}
         <button
           onClick={() => setShowLogoutModal(true)}
           className="absolute bottom-6 left-6 flex items-center text-red-500 hover:text-red-700 w-[calc(100%-3rem)] text-left py-3 px-4 rounded-lg transition-colors"
@@ -83,7 +56,6 @@ const Sidebar = ({ onMenuClick, activeMenu, toggleSidebar, sidebarOpen }) => {
         </button>
       </div>
 
-      {/* Logout Confirmation Modal */}
       {showLogoutModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-30">
           <div className="bg-gray-900 text-black p-6 rounded-lg w-96">

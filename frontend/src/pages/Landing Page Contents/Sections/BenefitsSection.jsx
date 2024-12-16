@@ -1,39 +1,17 @@
 import React from "react";
 import { Check } from "lucide-react";
-
-const benefits = [
-  {
-    text: "Enhanced Network Security",
-    description:
-      "Identify and manage unauthorized access to keep your network secure.",
-  },
-  {
-    text: "Improved Performance",
-    description:
-      "Monitor and manage bandwidth usage to ensure your network performs optimally.",
-  },
-  {
-    text: "Effortless Scalability",
-    description:
-      "Add more devices and expand coverage with ease as your network grows.",
-  },
-  {
-    text: "Actionable Insights",
-    description:
-      "Data-driven insights to prevent issues before they impact users.",
-  },
-];
+import { benefits } from "../../../constants/constants.jsx";
 
 const BenefitsSection = () => (
   <section
     id="benefits"
-    className="py-12 sm:py-24 px-6 sm:px-12 lg:px-24 bg-gradient-to-r from-gray-800 to-gray-900"
+    className="py-12 sm:py-18 px-6 sm:px-8 lg:px-24 bg-gradient-to-r from-gray-800 to-gray-900"
   >
     <div className="container mx-auto text-center">
       <h3 className="text-3xl sm:text-4xl md:text-5xl text-white mb-12 tracking-wide drop-shadow-lg">
         Benefits
       </h3>
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-12">
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-12">
         {benefits.map((benefit, index) => (
           <div
             key={index}

@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",
+    "@uidotdev/usehooks": "^2.4.1",
     "animate.css": "^4.1.1",
     "aos": "^2.3.4",
     "axios": "^1.7.8",

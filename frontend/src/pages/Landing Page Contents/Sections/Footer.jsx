@@ -1,10 +1,5 @@
 import React from "react";
-
-const FooterLinks = [
-  { href: "https://instagram.com/rrndxx", icon: "fab fa-instagram", label: "Instagram" },
-  { href: "https://facebook.com/rendyllryan.cabardo", icon: "fab fa-facebook", label: "Facebook" },
-  { href: "https://github.com/rrndxx", icon: "fab fa-github", label: "GitHub" },
-];
+import { FooterLinks } from "../../../constants/constants.jsx";
 
 const Footer = () => (
   <footer className="bg-gradient-to-r from-gray-800 to-gray-900 py-6 text-center">
