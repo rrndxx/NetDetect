@@ -1,7 +1,7 @@
 import MainContent from "./pages/Main Contents/MainContent";
-import LoginPage from "./pages/LoginPage";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import LandingPage from "./pages/Landing Page Contents/LandingPage";
+import { SignedIn, SignedOut } from "@clerk/clerk-react";
 
 const App = () => {
   return (
@@ -12,9 +12,22 @@ const App = () => {
       }}
     >
       <Routes>
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/main content" element={<MainContent />} />
+        <Route
+          path="/"
+          element={
+            <SignedOut>
+              <LandingPage />
+            </SignedOut>
+          }
+        />
+        <Route
+          path="/main content"
+          element={
+            <SignedIn>
+              <MainContent />
+            </SignedIn>
+          }
+        />
       </Routes>
     </Router>
   );

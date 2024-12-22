@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import HeroSection from "./Sections/HeroSection";
+import HeroSection from "../components/HeroSection";
 import FeatureSection from "./Sections/FeatureSection";
 import Footer from "./Sections/Footer";
 import BenefitsSection from "./Sections/BenefitsSection";
+import { SignInButton } from "@clerk/clerk-react";
 
 const LandingPage = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -15,7 +16,7 @@ const LandingPage = () => {
       {/* Navigation */}
       <nav className="bg-transparent p-4 sm:px-6 lg:px-8 sticky top-0 z-20 transition-all duration-300 backdrop-blur-md">
         <div className="container mx-auto flex justify-between items-center">
-          <h1 className="text-lg sm:text-3xl ms-4 tracking-wide text-[#00BFFF]">
+          <h1 className="text-3xl ms-4 tracking-wide text-[#00BFFF]">
             NetDetect
           </h1>
           <div className="hidden md:flex space-x-10 items-center">
@@ -37,12 +38,11 @@ const LandingPage = () => {
             >
               Benefits
             </a>
-            <button
-              className="bg-gradient-to-r from-blue-500 to-blue-700 text-gray-900 px-6 py-3 rounded-md shadow-lg text-lg sm:text-xl hover:scale-105 transition duration-200"
-              onClick={() => navigate("/login")}
-            >
-              Login
-            </button>
+            <SignInButton>
+              <button className="bg-gradient-to-r from-blue-500 to-blue-700 text-gray-900 px-6 py-3 rounded-md shadow-lg text-lg sm:text-xl hover:scale-105 transition duration-200">
+                Login
+              </button>
+            </SignInButton>
           </div>
           <button
             className="md:hidden text-white text-3xl"
@@ -83,12 +83,14 @@ const LandingPage = () => {
             >
               Benefits
             </a>
-            <button
-              className="bg-gradient-to-r from-blue-500 to-blue-700 text-gray-900 px-6 py-3 rounded-lg text-lg hover:scale-105 transition duration-200"
-              onClick={() => navigate("/login")}
-            >
-              Login
-            </button>
+            <SignInButton>
+              <button
+                className="bg-gradient-to-r from-blue-500 to-blue-700 text-gray-900 px-6 py-3 rounded-lg text-lg hover:scale-105 transition duration-200"
+                onClick={() => navigate("/login")}
+              >
+                Login
+              </button>
+            </SignInButton>
           </div>
         </div>
       )}

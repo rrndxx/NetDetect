@@ -88,9 +88,9 @@ export const menuItems = [
     label: "Connected Devices",
   },
   {
-    name: "bandwidthMonitoring",
+    name: "bandwidthUsage",
     icon: <FaTachometerAlt />,
-    label: "Bandwidth Monitoring",
+    label: "Bandwidth Usage",
   },
   { name: "block", icon: <FaUserLock />, label: "Block Devices" },
   { name: "notifications", icon: <FaBell />, label: "Notifications" },

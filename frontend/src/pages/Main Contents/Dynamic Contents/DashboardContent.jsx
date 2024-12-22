@@ -1,4 +1,7 @@
+import { useEffect, useState } from "react";
+
 const DashboardContent = () => {
+  const [networkStatus, setNetworkStatus] = useState();
   return (
     <div className="grid grid-cols-1 gap-8 p-6">
       <div className="bg-transparent p-6 rounded-lg shadow-lg transition-all duration-300 hover:bg-gray-700">

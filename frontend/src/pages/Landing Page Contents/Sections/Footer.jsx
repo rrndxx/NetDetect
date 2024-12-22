@@ -1,4 +1,3 @@
-import React from "react";
 import { FooterLinks } from "../../../constants/constants.jsx";
 
 const Footer = () => (

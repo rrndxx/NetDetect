@@ -1,29 +1,50 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 
 const DeviceManagementContents = () => {
-  const [devices, setDevices] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [state, setState] = useState({
+    devices: [],
+    loading: true,
+    error: null,
+  });
 
-  useEffect(() => {
-    const fetchDevices = async () => {
-      try {
-        const response = await axios.get("http://localhost:5000/api/devices");
-        setDevices(response.data.devices);
-      } catch (err) {
-        setError("Failed to fetch devices.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchDevices();
-    const intervalId = setInterval(fetchDevices, 60000);
-
-    return () => clearInterval(intervalId);
+  /**
+   * Function to fetch devices from the server
+   */
+  const fetchDevices = useCallback(async () => {
+    try {
+      setState((prevState) => ({ ...prevState, error: null })); // Reset error state before fetching
+      const response = await axios.get("http://localhost:5000/api/devices");
+      setState({
+        devices: response.data.devices || [],
+        loading: false,
+        error: null,
+      });
+    } catch (err) {
+      console.error("Error fetching devices:", err);
+      setState({
+        devices: [],
+        loading: false,
+        error: err?.response?.data?.message || "Failed to fetch devices.",
+      });
+    }
   }, []);
 
+  /**
+   * useEffect to fetch devices on component mount and set an interval to refresh every 60 seconds
+   */
+  useEffect(() => {
+    fetchDevices(); // Initial fetch on component mount
+    const intervalId = setInterval(fetchDevices, 60000); // Refresh every 60 seconds
+
+    return () => clearInterval(intervalId); // Cleanup on unmount
+  }, [fetchDevices]);
+
+  const { devices, loading, error } = state;
+
+  /**
+   * Loading state
+   */
   if (loading) {
     return (
       <div className="text-center mt-6">
@@ -34,10 +55,15 @@ const DeviceManagementContents = () => {
     );
   }
 
+  /**
+   * Error state
+   */
   if (error) {
     return (
       <div className="text-center mt-6">
-        <p className="text-red-500 text-center">{error}</p>
+        <p className="text-red-500 text-center">
+          {error}. Retrying in 60 seconds...
+        </p>
       </div>
     );
   }
@@ -49,7 +75,9 @@ const DeviceManagementContents = () => {
       </p>
 
       {devices.length === 0 ? (
-        <p className="text-center text-gray-400">No devices detected. Please try again later.</p>
+        <p className="text-center text-gray-400">
+          No devices detected. Please try again later.
+        </p>
       ) : (
         <table className="w-full mt-4 text-left text-sm text-gray-300">
           <thead>
@@ -66,10 +94,26 @@ const DeviceManagementContents = () => {
                 key={index}
                 className="border-b border-gray-800 hover:bg-gray-800 transition"
               >
-                <td className="px-4 py-2">{device.hostname || "N/A"}</td>
-                <td className="px-4 py-2">{device.ip_address || "N/A"}</td>
-                <td className="px-4 py-2">{device.mac_address || "N/A"}</td>
-                <td className="px-4 py-2">{device.device_type || "N/A"}</td>
+                <td className="px-4 py-2">
+                  {device.hostname || (
+                    <span className="text-gray-500">Unknown</span>
+                  )}
+                </td>
+                <td className="px-4 py-2">
+                  {device.ip_address || (
+                    <span className="text-gray-500">Unknown</span>
+                  )}
+                </td>
+                <td className="px-4 py-2">
+                  {device.mac_address || (
+                    <span className="text-gray-500">Unknown</span>
+                  )}
+                </td>
+                <td className="px-4 py-2">
+                  {device.device_type || (
+                    <span className="text-gray-500">Unknown</span>
+                  )}
+                </td>
               </tr>
             ))}
           </tbody>

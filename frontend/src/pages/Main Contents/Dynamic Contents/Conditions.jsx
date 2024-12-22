@@ -11,7 +11,7 @@ const Conditions = ({ activeMenu }) => {
         return <NetworkStatusContent />;
       case "deviceManagement":
         return <DeviceManagementContents />;
-      case "bandwidthMonitoring":
+      case "bandwidthUsage":
         return <BandwidthMonitoringContents />;
       default:
         return (

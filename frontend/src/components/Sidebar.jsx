@@ -1,17 +1,10 @@
 import React, { useState } from "react";
-import { auth } from "../firebase/firebase";
-import { useNavigate } from "react-router-dom";
 import { FaSignOutAlt } from "react-icons/fa";
 import { menuItems } from "../constants/constants.jsx";
+import { SignOutButton } from "@clerk/clerk-react";
 
 const Sidebar = ({ onMenuClick, activeMenu, toggleSidebar, sidebarOpen }) => {
-  const navigate = useNavigate();
   const [showLogoutModal, setShowLogoutModal] = useState(false);
-
-  const handleLogout = () => {
-    auth.signOut();
-    navigate("/login");
-  };
 
   return (
     <>
@@ -23,7 +16,7 @@ const Sidebar = ({ onMenuClick, activeMenu, toggleSidebar, sidebarOpen }) => {
       )}
 
       <div
-        className={`bg-transarent shadow-lg p-6 space-y-8 backdrop-blur-md fixed md:relative z-20 w-64 min-h-screen transition-all duration-300 transform ${
+        className={`bg-transparent shadow-lg p-6 space-y-8 backdrop-blur-md fixed min-h-full md:relative z-20 w-64 transition-all duration-300 transform ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
         }`}
       >
@@ -48,12 +41,15 @@ const Sidebar = ({ onMenuClick, activeMenu, toggleSidebar, sidebarOpen }) => {
           ))}
         </div>
 
-        <button
-          onClick={() => setShowLogoutModal(true)}
-          className="absolute bottom-6 left-6 flex items-center text-red-500 hover:text-red-700 w-[calc(100%-3rem)] text-left py-3 px-4 rounded-lg transition-colors"
-        >
-          <FaSignOutAlt className="mr-4 text-xl" /> Logout
-        </button>
+        {/* Bottom section (logout button) */}
+        <div className="mt-auto">
+          <button
+            onClick={() => setShowLogoutModal(true)}
+            className="flex items-center text-red-500 hover:text-red-700 w-full text-left py-3 px-4 rounded-lg transition-colors"
+          >
+            <FaSignOutAlt className="mr-4 text-xl" /> Logout
+          </button>
+        </div>
       </div>
 
       {showLogoutModal && (
@@ -70,12 +66,11 @@ const Sidebar = ({ onMenuClick, activeMenu, toggleSidebar, sidebarOpen }) => {
               >
                 Cancel
               </button>
-              <button
-                onClick={handleLogout}
-                className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
-              >
-                Logout
-              </button>
+              <SignOutButton>
+                <button className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">
+                  Logout
+                </button>
+              </SignOutButton>
             </div>
           </div>
         </div>

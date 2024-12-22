@@ -4,12 +4,13 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite  ",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview"
   },
   "dependencies": {
+    "@clerk/clerk-react": "^5.20.2",
     "@emailjs/browser": "^4.4.1",
     "@uidotdev/usehooks": "^2.4.1",
     "animate.css": "^4.1.1",
