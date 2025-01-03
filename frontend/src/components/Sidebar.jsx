@@ -41,7 +41,6 @@ const Sidebar = ({ onMenuClick, activeMenu, toggleSidebar, sidebarOpen }) => {
           ))}
         </div>
 
-        {/* Bottom section (logout button) */}
         <div className="mt-auto">
           <button
             onClick={() => setShowLogoutModal(true)}

@@ -1,15 +1,14 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import HeroSection from "../components/HeroSection";
-import FeatureSection from "./Sections/FeatureSection";
-import Footer from "./Sections/Footer";
-import BenefitsSection from "./Sections/BenefitsSection";
 import { SignInButton } from "@clerk/clerk-react";
+import HeroSection from "./Landing Page Contents/Sections/HeroSection";
+import FeatureSection from "./Landing Page Contents/Sections/FeatureSection";
+import BenefitsSection from "./Landing Page Contents/Sections/BenefitsSection";
+import Footer from "./Landing Page Contents/Sections/Footer";
 
 const LandingPage = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const toggleMenu = () => setMenuOpen((prev) => !prev);
-  const navigate = useNavigate();
 
   return (
     <div className="bg-gradient-to-r from-gray-800 to-gray-900 text-white min-h-screen flex flex-col scroll-smooth">
@@ -38,12 +37,12 @@ const LandingPage = () => {
             >
               Benefits
             </a>
-            <SignInButton>
-              <button className="bg-gradient-to-r from-blue-500 to-blue-700 text-gray-900 px-6 py-3 rounded-md shadow-lg text-lg sm:text-xl hover:scale-105 transition duration-200">
-                Login
-              </button>
-            </SignInButton>
           </div>
+          <SignInButton forceRedirectUrl={"/main content"}>
+            <button className="bg-gradient-to-r from-blue-500 to-blue-700 text-gray-900 px-6 py-3 rounded-md shadow-lg text-lg sm:text-xl hover:scale-105 transition duration-200">
+              Login
+            </button>
+          </SignInButton>
           <button
             className="md:hidden text-white text-3xl"
             aria-expanded={menuOpen}
@@ -83,11 +82,8 @@ const LandingPage = () => {
             >
               Benefits
             </a>
-            <SignInButton>
-              <button
-                className="bg-gradient-to-r from-blue-500 to-blue-700 text-gray-900 px-6 py-3 rounded-lg text-lg hover:scale-105 transition duration-200"
-                onClick={() => navigate("/login")}
-              >
+            <SignInButton forceRedirectUrl={"/main content"}>
+              <button className="bg-gradient-to-r from-blue-500 to-blue-700 text-gray-900 px-6 py-3 rounded-lg text-lg hover:scale-105 transition duration-200">
                 Login
               </button>
             </SignInButton>
@@ -100,10 +96,8 @@ const LandingPage = () => {
         <HeroSection />
         <FeatureSection />
         <BenefitsSection />
+        <Footer />
       </main>
-
-      {/* Footer */}
-      <Footer />
     </div>
   );
 };

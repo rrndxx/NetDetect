@@ -8,12 +8,9 @@ const DeviceManagementContents = () => {
     error: null,
   });
 
-  /**
-   * Function to fetch devices from the server
-   */
   const fetchDevices = useCallback(async () => {
     try {
-      setState((prevState) => ({ ...prevState, error: null })); // Reset error state before fetching
+      setState((prevState) => ({ ...prevState, error: null }));
       const response = await axios.get("http://localhost:5000/api/devices");
       setState({
         devices: response.data.devices || [],
@@ -30,21 +27,15 @@ const DeviceManagementContents = () => {
     }
   }, []);
 
-  /**
-   * useEffect to fetch devices on component mount and set an interval to refresh every 60 seconds
-   */
   useEffect(() => {
-    fetchDevices(); // Initial fetch on component mount
-    const intervalId = setInterval(fetchDevices, 60000); // Refresh every 60 seconds
+    fetchDevices(); 
+    const intervalId = setInterval(fetchDevices, 60000); 
 
-    return () => clearInterval(intervalId); // Cleanup on unmount
+    return () => clearInterval(intervalId); 
   }, [fetchDevices]);
 
   const { devices, loading, error } = state;
 
-  /**
-   * Loading state
-   */
   if (loading) {
     return (
       <div className="text-center mt-6">
@@ -55,9 +46,7 @@ const DeviceManagementContents = () => {
     );
   }
 
-  /**
-   * Error state
-   */
+ 
   if (error) {
     return (
       <div className="text-center mt-6">

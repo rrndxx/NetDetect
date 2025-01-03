@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Sidebar from "../../components/Sidebar";
 import Conditions from "./Dynamic Contents/Conditions";
 import { FaBars } from "react-icons/fa";

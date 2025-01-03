@@ -11,9 +11,6 @@ const NetworkStatusContent = () => {
   const [attempts, setAttempts] = useState(0);
   const intervalRef = useRef(null);
 
-  /**
-   * Function to fetch the network status
-   */
   const fetchNetworkStatus = useCallback(async () => {
     try {
       setState((prevState) => ({ ...prevState, error: null })); // Reset the error state
@@ -54,24 +51,19 @@ const NetworkStatusContent = () => {
     }
   }, [attempts]);
 
-  /**
-   * Set up an interval to fetch network status every 10 seconds
-   */
+
   useEffect(() => {
-    fetchNetworkStatus(); // Initial fetch on component mount
+    fetchNetworkStatus(); 
 
     intervalRef.current = setInterval(() => {
       fetchNetworkStatus();
-    }, 10000); // Refresh every 10 seconds
+    }, 10000); 
 
-    return () => clearInterval(intervalRef.current); // Cleanup on unmount
+    return () => clearInterval(intervalRef.current); 
   }, [fetchNetworkStatus]);
 
   const { networkStatus, loading, error } = state;
 
-  /**
-   * Display the loading message
-   */
   if (loading) {
     return (
       <h1 className="text-1xl text-center text-gray-400 animate-pulse">
@@ -80,9 +72,6 @@ const NetworkStatusContent = () => {
     );
   }
 
-  /**
-   * Display the error message
-   */
   if (error) {
     return (
       <div className="bg-transparent p-6 rounded-lg shadow-lg">
@@ -93,9 +82,6 @@ const NetworkStatusContent = () => {
     );
   }
 
-  /**
-   * If no network status is available, display fallback
-   */
   if (!networkStatus) {
     return (
       <div className="bg-transparent p-6 rounded-lg shadow-lg">
@@ -106,9 +92,6 @@ const NetworkStatusContent = () => {
     );
   }
 
-  /**
-   * Destructure the data from the network status
-   */
   const {
     download_speed,
     upload_speed,
