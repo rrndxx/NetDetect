@@ -1,7 +1,8 @@
 import MainContent from "./pages/Main Contents/MainContent";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import LandingPage from "./pages/LandingPage";
-import { SignedIn, SignedOut } from "@clerk/clerk-react";
+import { SignedIn } from "@clerk/clerk-react";
+import ErrorPage from "./pages/ErrorPage";
 
 const App = () => {
   return (
@@ -21,6 +22,7 @@ const App = () => {
             </SignedIn>
           }
         />
+        <Route path="*" element={<ErrorPage />} />
       </Routes>
     </Router>
   );

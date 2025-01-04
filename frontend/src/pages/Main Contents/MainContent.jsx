@@ -40,7 +40,7 @@ const MainContent = () => {
         </div>
 
         {/* Dynamic content based on active menu */}
-        <div className="min-h-[calc(100vh-9rem)]">
+        <div className="min-h-[calc(100vh-8rem)]">
           <Conditions activeMenu={activeMenu} />
         </div>
       </div>

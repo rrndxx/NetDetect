@@ -1,6 +1,7 @@
 import BandwidthMonitoringContents from "./BandwidthMonitoringContents";
 import DashboardContent from "./DashboardContent";
 import DeviceManagementContents from "./DeviceManagementContents";
+import MacFilteringPage from "./MACFilteringContents";
 import NetworkStatusContent from "./NetworkStatusContent";
 const Conditions = ({ activeMenu }) => {
   const content = () => {
@@ -13,6 +14,8 @@ const Conditions = ({ activeMenu }) => {
         return <DeviceManagementContents />;
       case "bandwidthUsage":
         return <BandwidthMonitoringContents />;
+      case "macFiltering":
+        return <MacFilteringPage />
       default:
         return (
           <div className="text-gray-400 mt-6 ms-10">No content available</div>

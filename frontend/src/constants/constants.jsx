@@ -92,6 +92,7 @@ export const menuItems = [
     icon: <FaTachometerAlt />,
     label: "Bandwidth Usage",
   },
+  { name: "macFiltering", icon: <FaUserLock />, label: "MAC Filtering" },
   { name: "notifications", icon: <FaBell />, label: "Notifications" },
   { name: "logs", icon: <FaFile />, label: "Logs" },
 ];

@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { SignInButton } from "@clerk/clerk-react";
 import HeroSection from "./Landing Page Contents/Sections/HeroSection";
 import FeatureSection from "./Landing Page Contents/Sections/FeatureSection";
 import BenefitsSection from "./Landing Page Contents/Sections/BenefitsSection";
 import Footer from "./Landing Page Contents/Sections/Footer";
+import AboutSection from "./Landing Page Contents/Sections/AboutSection";
+import ContactUsSection from "./Landing Page Contents/Sections/ContactUsSection";
 
 const LandingPage = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -38,8 +39,20 @@ const LandingPage = () => {
               >
                 Benefits
               </a>
+              <a
+                href="#about"
+                className="text-md sm:text-lg hover:text-[#00BFFF] transition duration-300"
+              >
+                About
+              </a>
+              <a
+                href="#contact"
+                className="text-md sm:text-lg hover:text-[#00BFFF] transition duration-300"
+              >
+                Contact
+              </a>
             </div>
-            <SignInButton forceRedirectUrl={"/main content"}>
+            <SignInButton forceRedirectUrl={"/main content"} mode="modal">
               <button className="bg-gradient-to-r from-blue-500 to-blue-700 text-gray-900 px-6 py-3 rounded-md shadow-lg text-lg sm:text-xl hover:scale-105 transition duration-200">
                 Login
               </button>
@@ -84,7 +97,21 @@ const LandingPage = () => {
             >
               Benefits
             </a>
-            <SignInButton forceRedirectUrl={"/main content"}>
+            <a
+              href="#about"
+              className="text-lg hover:text-[#00a1e0] transition duration-300 w-full text-center"
+              onClick={toggleMenu}
+            >
+              About
+            </a>
+            <a
+              href="#contact"
+              className="text-lg hover:text-[#00a1e0] transition duration-300 w-full text-center"
+              onClick={toggleMenu}
+            >
+              Contact Us
+            </a>
+            <SignInButton forceRedirectUrl={"/main content"} mode="modal">
               <button className="bg-gradient-to-r from-blue-500 to-blue-700 text-gray-900 px-6 py-3 rounded-lg text-lg hover:scale-105 transition duration-200">
                 Login
               </button>
@@ -98,6 +125,8 @@ const LandingPage = () => {
         <HeroSection />
         <FeatureSection />
         <BenefitsSection />
+        <AboutSection />
+        <ContactUsSection />
         <Footer />
       </main>
     </div>

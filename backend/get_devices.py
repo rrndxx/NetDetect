@@ -270,7 +270,7 @@ def scan_network(ip_range):
                 devices.append(future.result())
             except Exception as e:
                 print(f"Error scanning {futures[future]}: {e}")
-
+    
     devices += retry_scan_for_missing_devices(hosts, devices)
 
     return devices
