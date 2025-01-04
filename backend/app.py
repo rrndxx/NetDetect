@@ -21,6 +21,7 @@ last_received = 0
 last_sent = 0
 bandwidth_usage_lock = Lock()
 bandwidth_usage_data = {}
+total_bandwidth_usage = {"download_usage": 0, "upload_usage": 0}
 
 
 async def run_speedtest():
@@ -75,7 +76,7 @@ def _get_network_info():
 
 
 def track_bandwidth_usage():
-    global last_received, last_sent, bandwidth_usage_data
+    global last_received, last_sent, bandwidth_usage_data, total_bandwidth_usage
 
     while True:
         with bandwidth_usage_lock:
@@ -98,6 +99,10 @@ def track_bandwidth_usage():
                 "upload_usage": upload_usage,
             }
 
+            # Update total network usage across all devices
+            total_bandwidth_usage["download_usage"] += download_usage
+            total_bandwidth_usage["upload_usage"] += upload_usage
+
         time.sleep(1)  # Update bandwidth usage every second
 
 
@@ -113,6 +118,7 @@ async def fetch_network_status():
         "ping": ping,
         "network_info": network_info,
         "bandwidth_usage": bandwidth_usage_data,
+        "total_bandwidth_usage": total_bandwidth_usage,
     }
 
 
@@ -154,6 +160,10 @@ def get_network_status():
                             "download_usage": None,
                             "upload_usage": None,
                         },
+                        "total_bandwidth_usage": {
+                            "download_usage": None,
+                            "upload_usage": None,
+                        },
                     }
                 ),
                 200,
@@ -185,6 +195,22 @@ def continuous_scan():
         except Exception as e:
             print(f"Error during scan: {e}")
         time.sleep(60)  # Perform scan every 60 seconds
+
+
+@app.route("/api/bandwidth-usage", methods=["GET"])
+def get_bandwidth_usage():
+    """
+    Returns real-time bandwidth usage.
+    """
+    with bandwidth_usage_lock:
+        download_speed = bandwidth_usage_data["download_usage"]
+        upload_speed = bandwidth_usage_data["upload_usage"]
+
+    bandwidth_data = {
+        "status": "success",
+        "bandwidth_usage": {"download": download_speed, "upload": upload_speed},
+    }
+    return jsonify(bandwidth_data)
 
 
 if __name__ == "__main__":

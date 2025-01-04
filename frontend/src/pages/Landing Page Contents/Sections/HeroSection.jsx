@@ -15,11 +15,8 @@ const HeroSection = () => {
           Secure, manage, and monitor your networks with powerful tools, all
           from a single platform.
         </p>
-        <SignInButton>
-          <button
-            onClick={() => navigate("/login")}
-            className="bg-gradient-to-r from-blue-500 to-blue-800 text-gray-900 px-8 py-4 rounded-md shadow-xl text-lg sm:text-xl transform transition-all duration-300 hover:scale-125 hover:animate-none"
-          >
+        <SignInButton forceRedirectUrl={"/main content"}>
+          <button className="bg-gradient-to-r from-blue-500 to-blue-800 text-gray-900 px-8 py-4 rounded-md shadow-xl text-lg sm:text-xl transform transition-all duration-300 hover:scale-125 hover:animate-none">
             Get Started
           </button>
         </SignInButton>

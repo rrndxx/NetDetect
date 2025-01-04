@@ -92,8 +92,6 @@ export const menuItems = [
     icon: <FaTachometerAlt />,
     label: "Bandwidth Usage",
   },
-  { name: "block", icon: <FaUserLock />, label: "Block Devices" },
   { name: "notifications", icon: <FaBell />, label: "Notifications" },
   { name: "logs", icon: <FaFile />, label: "Logs" },
-  { name: "settings", icon: <FaCogs />, label: "Settings" },
 ];

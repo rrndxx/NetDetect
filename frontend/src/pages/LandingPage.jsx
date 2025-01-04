@@ -18,31 +18,33 @@ const LandingPage = () => {
           <h1 className="text-3xl ms-4 tracking-wide text-[#00BFFF]">
             NetDetect
           </h1>
-          <div className="hidden md:flex space-x-10 items-center">
-            <a
-              href="#home"
-              className="text-md sm:text-lg hover:text-[#00BFFF] transition duration-300"
-            >
-              Home
-            </a>
-            <a
-              href="#features"
-              className="text-md sm:text-lg hover:text-[#00BFFF] transition duration-300"
-            >
-              Features
-            </a>
-            <a
-              href="#benefits"
-              className="text-md sm:text-lg hover:text-[#00BFFF] transition duration-300"
-            >
-              Benefits
-            </a>
+          <div className="hidden md:flex items-center space-x-10">
+            <div className="space-x-10 items-center">
+              <a
+                href="#home"
+                className="text-md sm:text-lg hover:text-[#00BFFF] transition duration-300"
+              >
+                Home
+              </a>
+              <a
+                href="#features"
+                className="text-md sm:text-lg hover:text-[#00BFFF] transition duration-300"
+              >
+                Features
+              </a>
+              <a
+                href="#benefits"
+                className="text-md sm:text-lg hover:text-[#00BFFF] transition duration-300"
+              >
+                Benefits
+              </a>
+            </div>
+            <SignInButton forceRedirectUrl={"/main content"}>
+              <button className="bg-gradient-to-r from-blue-500 to-blue-700 text-gray-900 px-6 py-3 rounded-md shadow-lg text-lg sm:text-xl hover:scale-105 transition duration-200">
+                Login
+              </button>
+            </SignInButton>
           </div>
-          <SignInButton forceRedirectUrl={"/main content"}>
-            <button className="bg-gradient-to-r from-blue-500 to-blue-700 text-gray-900 px-6 py-3 rounded-md shadow-lg text-lg sm:text-xl hover:scale-105 transition duration-200">
-              Login
-            </button>
-          </SignInButton>
           <button
             className="md:hidden text-white text-3xl"
             aria-expanded={menuOpen}

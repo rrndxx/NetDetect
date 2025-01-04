@@ -23,8 +23,8 @@ const MainContent = () => {
       />
 
       {/* Main content area */}
-      <div className="flex-1 p-8">
-        <div className="flex justify-between items-center mb-8">
+      <div className="flex-1 p-8 sm:ms-0 md:ms-56">
+        <div className="flex justify-between items-center">
           {/* Sidebar Toggle Button for mobile */}
           <button
             onClick={toggleSidebar}
@@ -40,7 +40,7 @@ const MainContent = () => {
         </div>
 
         {/* Dynamic content based on active menu */}
-        <div className="min-h-lvh">
+        <div className="min-h-[calc(100vh-9rem)]">
           <Conditions activeMenu={activeMenu} />
         </div>
       </div>

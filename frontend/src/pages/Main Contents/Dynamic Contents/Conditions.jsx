@@ -15,7 +15,7 @@ const Conditions = ({ activeMenu }) => {
         return <BandwidthMonitoringContents />;
       default:
         return (
-          <div className="text-center text-gray-400">No content available</div>
+          <div className="text-gray-400 mt-6 ms-10">No content available</div>
         );
     }
   };

@@ -13,7 +13,7 @@ const NetworkStatusContent = () => {
 
   const fetchNetworkStatus = useCallback(async () => {
     try {
-      setState((prevState) => ({ ...prevState, error: null })); // Reset the error state
+      setState((prevState) => ({ ...prevState, error: null }));
       const response = await axios.get(
         "http://localhost:5000/api/network-status"
       );
@@ -23,8 +23,6 @@ const NetworkStatusContent = () => {
       }
 
       const data = response.data;
-      console.log("Response from API:", data);
-
       if (data.status === "success") {
         setState({
           networkStatus: data,
@@ -32,7 +30,6 @@ const NetworkStatusContent = () => {
           error: null,
         });
       } else if (data.status === "loading") {
-        console.log("Network status is still loading...");
         if (attempts < 5) {
           setAttempts((prev) => prev + 1);
         } else {
@@ -42,7 +39,6 @@ const NetworkStatusContent = () => {
         throw new Error(data.message || "Network status is unavailable.");
       }
     } catch (error) {
-      console.error("Error fetching network status:", error);
       setState({
         networkStatus: null,
         loading: false,
@@ -51,15 +47,14 @@ const NetworkStatusContent = () => {
     }
   }, [attempts]);
 
-
   useEffect(() => {
-    fetchNetworkStatus(); 
+    fetchNetworkStatus();
 
     intervalRef.current = setInterval(() => {
       fetchNetworkStatus();
-    }, 10000); 
+    }, 10000);
 
-    return () => clearInterval(intervalRef.current); 
+    return () => clearInterval(intervalRef.current);
   }, [fetchNetworkStatus]);
 
   const { networkStatus, loading, error } = state;
@@ -74,7 +69,7 @@ const NetworkStatusContent = () => {
 
   if (error) {
     return (
-      <div className="bg-transparent p-6 rounded-lg shadow-lg">
+      <div className="bg-transparent p-6">
         <p className="text-red-500 text-center animate-pulse">
           Error: {error}. Retrying in 5 seconds...
         </p>
@@ -84,7 +79,7 @@ const NetworkStatusContent = () => {
 
   if (!networkStatus) {
     return (
-      <div className="bg-transparent p-6 rounded-lg shadow-lg">
+      <div className="bg-transparent p-6">
         <p className="text-red-500 text-center">
           Unable to retrieve network status.
         </p>
@@ -97,58 +92,74 @@ const NetworkStatusContent = () => {
     upload_speed,
     ping,
     network_info = {},
+    bandwidth_usage = {},
+    total_bandwidth_usage = {},
   } = networkStatus;
 
   return (
-    <div className="bg-transparent p-6 rounded-lg shadow-lg">
-      <h1 className="text-xl font-semibold text-[#00BFFF] w-full sm:w-auto">
+    <div className="bg-transparent p-6">
+      <h1 className="text-xl font-semibold text-[#00BFFF] mb-4">
         Status: <span className="font-semibold text-green-500">Online</span>
       </h1>
-      <hr className="my-4 border-t border-[#444]" />
+      <hr className="mb-6 border-t border-[#444]" />
 
-      {/* Network Speed Section */}
-      <div className="mt-4 space-y-4 text-sm text-gray-400">
-        <div className="flex items-center space-x-3">
-          <FaDownload className="text-[#00BFFF] animate-pulse" />
-          <p>
-            <strong>Download Speed:</strong>{" "}
-            {download_speed?.toFixed(2) ?? "Loading..."} Mbps
-          </p>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        {/* Network Speed Card */}
+        <div className="bg-gray-800 shadow-md rounded-lg p-6">
+          <h2 className="text-xl font-semibold text-[#00BFFF] mb-4">
+            Network Speed
+          </h2>
+          <div className="space-y-4 text-gray-400">
+            <div className="flex items-center space-x-3">
+              <FaDownload className="text-[#00BFFF]" />
+              <p>
+                <strong>Download Speed:</strong>{" "}
+                {download_speed?.toFixed(2) ?? "Loading..."} Mbps
+              </p>
+            </div>
+            <div className="flex items-center space-x-3">
+              <FaUpload className="text-[#00BFFF]" />
+              <p>
+                <strong>Upload Speed:</strong>{" "}
+                {upload_speed?.toFixed(2) ?? "Loading..."} Mbps
+              </p>
+            </div>
+            <div className="flex items-center space-x-3">
+              <FaWifi className="text-[#00BFFF]" />
+              <p>
+                <strong>Ping:</strong> {ping ?? "Loading..."} ms
+              </p>
+            </div>
+          </div>
         </div>
-        <div className="flex items-center space-x-3">
-          <FaUpload className="text-[#00BFFF] animate-pulse" />
-          <p>
-            <strong>Upload Speed:</strong>{" "}
-            {upload_speed?.toFixed(2) ?? "Loading..."} Mbps
-          </p>
-        </div>
-        <div className="flex items-center space-x-3">
-          <FaWifi className="text-[#00BFFF] animate-pulse" />
-          <p>
-            <strong>Ping:</strong> {ping ?? "Loading..."} ms
-          </p>
-        </div>
-      </div>
 
-      {/* Network Information Section */}
-      <div className="mt-8 space-y-4 text-sm text-gray-400">
-        <h2 className="text-xl font-semibold text-[#00BFFF]">
-          Network Information
-        </h2>
-        <p>
-          <strong>Local IP:</strong> {network_info["Local IP"] ?? "Loading..."}
-        </p>
-        <p>
-          <strong>External IP:</strong>{" "}
-          {network_info["External IP"] ?? "Loading..."}
-        </p>
-        <p>
-          <strong>MAC Address:</strong>{" "}
-          {network_info["MAC Address"] ?? "Loading..."}
-        </p>
-        <p>
-          <strong>IP Address:</strong> {network_info["IP"] ?? "Loading..."}
-        </p>
+        {/* Network Information Card */}
+        <div className="bg-gray-800 shadow-md rounded-lg p-6">
+          <h2 className="text-xl font-semibold text-[#00BFFF] mb-4">
+            Network Information
+          </h2>
+          <div className="space-y-2 text-gray-400">
+            <p>
+              <strong>Local IP:</strong>{" "}
+              {network_info["Local IP"] ?? "Loading..."}
+            </p>
+            <p>
+              <strong>External IP:</strong>{" "}
+              {network_info["External IP"] ?? "Loading..."}
+            </p>
+            <p>
+              <strong>MAC Address:</strong>{" "}
+              {network_info["MAC Address"] ?? "Loading..."}
+            </p>
+            <p>
+              <strong>IP Address:</strong> {network_info["IP"] ?? "Loading..."}
+            </p>
+            <p>
+              <strong>Router IP:</strong>{" "}
+              {network_info["Router IP"] ?? "Loading..."}
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   );

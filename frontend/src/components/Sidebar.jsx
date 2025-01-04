@@ -16,20 +16,20 @@ const Sidebar = ({ onMenuClick, activeMenu, toggleSidebar, sidebarOpen }) => {
       )}
 
       <div
-        className={`bg-transparent shadow-lg p-6 space-y-8 backdrop-blur-md fixed min-h-full md:relative z-20 w-64 transition-all duration-300 transform ${
+        className={`bg-transparent shadow-lg p-8 space-y-8 backdrop-blur-md fixed inset-0 min-h-full z-20 w-64 transition-all duration-300 transform ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
         }`}
       >
-        <h2 className="text-2xl font-semibold text-[#00BFFF] mb-10 mt-2 text-center">
+        <h2 className="text-2xl font-semibold text-[#00BFFF] mb-6 mt-2 text-center">
           NetDetect
         </h2>
 
-        <div className="space-y-6">
+        <div className="space-y-2">
           {menuItems.map((menu) => (
             <button
               key={menu.name}
               onClick={() => onMenuClick(menu.name)}
-              className={`flex items-center w-full text-left py-3 px-4 rounded-lg transition-colors ${
+              className={`flex items-center w-full text-left py-2 px-4 rounded-lg transition-colors ${
                 activeMenu === menu.name
                   ? "text-[#00BFFF] bg-gray-700"
                   : "text-gray-400 hover:text-[#00BFFF] hover:bg-gray-700"
@@ -41,6 +41,7 @@ const Sidebar = ({ onMenuClick, activeMenu, toggleSidebar, sidebarOpen }) => {
           ))}
         </div>
 
+        {/* Fixed to the bottom of the sidebar */}
         <div className="mt-auto">
           <button
             onClick={() => setShowLogoutModal(true)}
@@ -52,7 +53,7 @@ const Sidebar = ({ onMenuClick, activeMenu, toggleSidebar, sidebarOpen }) => {
       </div>
 
       {showLogoutModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-30">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-30 mt-auto">
           <div className="bg-gray-900 text-black p-6 rounded-lg w-96">
             <h3 className="text-[#00BFFF] text-xl font-semibold mb-4">
               Confirm Logout
@@ -65,7 +66,7 @@ const Sidebar = ({ onMenuClick, activeMenu, toggleSidebar, sidebarOpen }) => {
               >
                 Cancel
               </button>
-              <SignOutButton>
+              <SignOutButton redirectUrl="/">
                 <button className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">
                   Logout
                 </button>

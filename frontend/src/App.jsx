@@ -1,7 +1,7 @@
 import MainContent from "./pages/Main Contents/MainContent";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import LandingPage from "./pages/LandingPage";
-import { SignedIn } from "@clerk/clerk-react";
+import { SignedIn, SignedOut } from "@clerk/clerk-react";
 
 const App = () => {
   return (
@@ -16,9 +16,9 @@ const App = () => {
         <Route
           path="/main content"
           element={
-            // <SignedIn>
+            <SignedIn>
               <MainContent />
-            // </SignedIn>
+            </SignedIn>
           }
         />
       </Routes>
