@@ -109,9 +109,9 @@ const DashboardContent = () => {
       </div>
 
       {/* Usage Stats */}
-      <div className="bg-gray-800 shadow-md px-8 py-6 rounded-lg w-full">
+      <div className="bg-gray-800 shadow-md px-8 py-6 rounded-lg w-full pb-12">
         <h3 className="text-xl font-semibold text-[#00BFFF] mb-4 text-center">
-          Usage Stats
+          Network Speed Stats
         </h3>
         {networkLoading ? (
           <p className="text-sm text-gray-400 text-center mb-10">Loading...</p>

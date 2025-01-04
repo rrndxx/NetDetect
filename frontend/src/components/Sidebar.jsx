@@ -24,7 +24,7 @@ const Sidebar = ({ onMenuClick, activeMenu, toggleSidebar, sidebarOpen }) => {
           NetDetect
         </h2>
 
-        <div className="space-y-2">
+        <div className="space-y-2 pb-12">
           {menuItems.map((menu) => (
             <button
               key={menu.name}
