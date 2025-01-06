@@ -113,7 +113,7 @@ const NetworkStatusContent = () => {
       {/* Header Section */}
       <div className="bg-[#1F2937] shadow-md px-8 py-6 rounded-lg mb-8 max-w-full mx-auto">
         <p className="text-sm text-gray-400 mt-2">
-          Welcome to your network status dashboard! Here, you can view real-time
+          Welcome to your Network Status Dashboard! Here, you can view real-time
           data about your network performance and details.
         </p>
       </div>

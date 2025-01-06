@@ -112,7 +112,7 @@ const DashboardContent = () => {
       {/* Header Section */}
       <div className="bg-[#1F2937] shadow-md px-8 py-6 rounded-lg mb-8 max-w-full mx-auto">
         <p className="text-sm text-gray-400 mt-2">
-          Welcome to your network dashboard! Here, you can view real-time data
+          Welcome to your Main Dashboard! Here, you can see and overview of real-time data
           about your connected devices and network performance.
         </p>
       </div>

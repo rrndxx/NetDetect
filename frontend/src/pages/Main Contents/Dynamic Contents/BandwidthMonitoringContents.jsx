@@ -102,7 +102,7 @@ const BandwidthMonitoringContents = () => {
       {/* Header */}
       <div className="bg-[#1F2937] shadow-md px-8 py-6 rounded-lg mb-8 max-w-full mx-auto">
         <p className="text-sm text-gray-400 mt-2">
-          Welcome to your bandwidth usage dashboard! Here, you can view
+          Welcome to your Bandwidth Usage Dashboard! Here, you can view
           real-time data about the bandwidth usage of your network.
         </p>
       </div>

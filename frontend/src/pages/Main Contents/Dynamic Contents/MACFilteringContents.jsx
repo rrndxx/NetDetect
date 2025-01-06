@@ -78,6 +78,11 @@ const MacFilteringPage = () => {
 
   return (
     <div className="grid grid-cols-1 gap-6 p-6">
+      <div className="bg-[#1F2937] shadow-md px-8 py-6 rounded-lg mb-8 max-w-full mx-auto">
+        <p className="text-sm text-gray-400 mt-2">
+          Welcome to your MAC Filtering Dashboard! Here, you can manually block certain MAC addresses and view your blocked list.
+        </p>
+      </div>
       {/* MAC Address Input and Action */}
       <div className="bg-gray-800 shadow-md px-8 py-6 rounded-lg w-full mb-2">
         <h4 className="text-lg font-semibold text-[#00BFFF] mb-4">

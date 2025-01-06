@@ -142,7 +142,7 @@ const DeviceManagementContents = () => {
       {/* Header Section */}
       <div className="bg-[#1F2937] shadow-md px-8 py-6 rounded-lg mb-8 max-w-full mx-auto">
         <p className="text-sm text-gray-400 mt-2">
-          Welcome to your network dashboard! Here, you can view real-time data
+          Welcome to your Connected Devices Dashboard! Here, you can view real-time data
           about all connected devices.
         </p>
       </div>
