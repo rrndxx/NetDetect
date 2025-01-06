@@ -1,5 +1,7 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import axios from "axios";
+import emailjs from "emailjs-com"; // Make sure to install EmailJS via npm or yarn
+import { useNotifications } from "../../../context/NotificationsContext";
 
 // Reusable TableRow component for consistent table design
 const TableRow = ({ device }) => (
@@ -17,9 +19,6 @@ const TableRow = ({ device }) => (
       {device.device_type || <span className="text-gray-500">Unknown</span>}
     </td>
     <td className="px-4 py-2">
-      {device.device_model || <span className="text-gray-500">Unknown</span>}
-    </td>
-    <td className="px-4 py-2">
       {device.os || <span className="text-gray-500">Unknown</span>}
     </td>
   </tr>
@@ -31,17 +30,74 @@ const DeviceManagementContents = () => {
     loading: true,
     error: null,
   });
+  const prevDevicesRef = useRef([]);
+  const { addNotification } = useNotifications();
+
+  // Function to send email via EmailJS
+  const sendEmailNotification = (newDevice) => {
+    const templateParams = {
+      to_email: "rendyllcabardo11@gmail.com", // Replace with your email
+      device_ip: newDevice.ip_address,
+      device_mac: newDevice.mac_address,
+      device_hostname: newDevice.hostname || "Unknown",
+      device_type: newDevice.device_type || "Unknown",
+      device_os: newDevice.os || "Unknown",
+    };  
+
+    // Send email via EmailJS asynchronously
+    emailjs
+      .send(
+        // import.meta.env.VITE_EMAILJS_SERVICE_ID,
+        // import.meta.env.VITE_EMAILJS_TEMPLATE_ID2,
+        // templateParams,
+        // import.meta.env.VITE_EMAILJS_USER_ID
+      )
+      .then(
+        (response) => {
+          console.log("Email sent successfully:", response);
+        },
+        (error) => {
+          console.error("Error sending email:", error);
+        }
+      );
+  };
 
   // Fetch device data
   const fetchDevices = useCallback(async () => {
     try {
       setState((prevState) => ({ ...prevState, error: null }));
       const response = await axios.get("http://localhost:5000/api/devices");
+      const newDevices = response.data.devices || [];
+
+      // Check for new devices by comparing against the previous list
+      const newDevicesList = newDevices.filter(
+        (newDevice) =>
+          !prevDevicesRef.current.some(
+            (prevDevice) => prevDevice.mac_address === newDevice.mac_address
+          )
+      );
+
+      // For each new device, send an email notification
+      newDevicesList.forEach((newDevice) => {
+        sendEmailNotification(newDevice);
+      });
+
+      newDevicesList.forEach((newDevice) => {
+        addNotification({
+          message: `New device connected: ${newDevice.hostname || "Unknown"} (${newDevice.ip_address})`,
+          timestamp: new Date().toISOString(),
+        });
+      });
+
+      // Update state with the new list of devices
       setState({
-        devices: response.data.devices || [],
+        devices: newDevices,
         loading: false,
         error: null,
       });
+
+      // Update previous devices reference to current devices
+      prevDevicesRef.current = newDevices;
     } catch (err) {
       console.error("Error fetching devices:", err);
       setState({
@@ -50,11 +106,11 @@ const DeviceManagementContents = () => {
         error: err?.response?.data?.message || "Failed to fetch devices.",
       });
     }
-  }, []);
+  }, [addNotification]);
 
   useEffect(() => {
     fetchDevices();
-    const intervalId = setInterval(fetchDevices, 60000); // Fetch devices every 60 seconds
+    const intervalId = setInterval(fetchDevices, 60000); // Fetch devices every 60 seconds  
 
     return () => clearInterval(intervalId);
   }, [fetchDevices]);
@@ -86,9 +142,8 @@ const DeviceManagementContents = () => {
       {/* Header Section */}
       <div className="bg-[#1F2937] shadow-md px-8 py-6 rounded-lg mb-8 max-w-full mx-auto">
         <p className="text-sm text-gray-400 mt-2">
-          Welcome to your network dashboard connected devices dashboard! Here,
-          you can view real-time data about all connected devices to your
-          network and their information.
+          Welcome to your network dashboard! Here, you can view real-time data
+          about all connected devices.
         </p>
       </div>
       <hr className="mb-6 border-t border-[#444]" />
@@ -111,7 +166,6 @@ const DeviceManagementContents = () => {
                 <th className="px-4 py-2">IP Address</th>
                 <th className="px-4 py-2">MAC Address</th>
                 <th className="px-4 py-2">Device Type</th>
-                <th className="px-4 py-2">Device Model</th>
                 <th className="px-4 py-2">OS</th>
               </tr>
             </thead>

@@ -1,43 +1,12 @@
-import React, { useState, useEffect } from "react";
 import {
   FaLaptop,
   FaExclamationTriangle,
   FaNetworkWired,
 } from "react-icons/fa";
+import { useNotifications } from "../../../context/NotificationsContext";
 
 const NotificationsPage = () => {
-  const [notifications, setNotifications] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    // Simulate fetching notifications from an API
-    const simulatedNotifications = [
-      {
-        type: "info",
-        title: "New Device Detected",
-        message: "Device LAB1PC11 has joined the network.",
-        timestamp: new Date().toISOString(),
-      },
-      {
-        type: "warning",
-        title: "High Bandwidth Usage",
-        message:
-          "LAB1PC11 is consuming too much bandwidth. Consider reviewing.",
-        timestamp: new Date(Date.now() - 1000 * 60 * 15).toISOString(),
-      },
-      {
-        type: "info",
-        title: "Connection Restored",
-        message: "Device LAB2PC01 is now back online.",
-        timestamp: new Date(Date.now() - 1000 * 60 * 45).toISOString(),
-      },
-    ];
-
-    setTimeout(() => {
-      setNotifications(simulatedNotifications);
-      setLoading(false);
-    }, 1500);
-  }, []);
+  const { notifications } = useNotifications();
 
   const renderIcon = (type) => {
     switch (type) {
@@ -53,11 +22,7 @@ const NotificationsPage = () => {
   return (
     <div className="p-6">
       <div className="grid grid-cols-1 gap-6">
-        {loading ? (
-          <p className="col-span-full text-sm text-gray-400 text-center">
-            Loading notifications...
-          </p>
-        ) : notifications.length === 0 ? (
+        {notifications.length === 0 ? (
           <p className="col-span-full text-sm text-gray-400 text-center">
             No notifications to display.
           </p>
@@ -76,7 +41,16 @@ const NotificationsPage = () => {
                 </h4>
                 <p className="text-sm text-gray-400">{notification.message}</p>
                 <p className="text-xs text-gray-500 mt-1">
-                  {new Date(notification.timestamp).toLocaleString()}
+                  {notification.timestamp
+                    ? new Date(notification.timestamp).toLocaleString("en-US", {
+                        year: "numeric",
+                        month: "short",
+                        day: "numeric",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        second: "2-digit",
+                      })
+                    : "Invalid Date"}
                 </p>
               </div>
             </div>

@@ -83,47 +83,70 @@ def get_host_mac():
         return "N/A"
 
 
-def parse_device_type_and_model(nm, ip_address):
-    """Parse device type and model information based on Nmap scan results."""
-    os_name = "Unknown"
-    vendor_name = "Unknown"
+def parse_device_type(nm, ip_address):
+    """Improved device type parsing based on Nmap scan results."""
     device_type = "Unknown Device"
-    model_info = "Unknown Model"
 
     if ip_address not in nm.all_hosts():
-        return os_name, vendor_name, device_type, model_info
+        return device_type
 
-    # Parse OS matches
+    # Look at OS match results
     os_matches = nm[ip_address].get("osmatch", [])
     os_classes = nm[ip_address].get("osclass", [])
-    for match in os_matches:
-        os_name = match.get("name", "Unknown")
-        if "android" in os_name.lower():
-            return os_name, vendor_name, "Mobile Device", "Android"
-        if "ios" in os_name.lower() or "iphone" in os_name.lower():
-            return os_name, vendor_name, "Mobile Device", "iOS"
-        if "windows" in os_name.lower():
-            return os_name, vendor_name, "Desktop/Laptop", "Windows"
-        if "linux" in os_name.lower():
-            return os_name, vendor_name, "Desktop/Laptop", "Linux"
 
-    # Use OS class information if available
+    for match in os_matches:
+        os_name = match.get("name", "").lower()
+        if "android" in os_name:
+            return "Mobile Device"
+        if "ios" in os_name or "iphone" in os_name:
+            return "Mobile Device"
+        if "windows" in os_name:
+            return "Windows Laptop/Desktop"
+        if "linux" in os_name:
+            return "Linux Laptop/Desktop"
+        if "mac" in os_name:
+            return "MacOS Laptop/Desktop"
+
     for os_class in os_classes:
         if os_class.get("type") in ["phone", "tablet"]:
-            return os_name, os_class.get("vendor", "Unknown"), "Mobile Device", os_name
+            return "Mobile Device"
         if os_class.get("type") == "computer":
-            return os_name, os_class.get("vendor", "Unknown"), "Desktop/Laptop", os_name
+            return "Laptop/Desktop"
 
-    # Use vendor information from MAC or Nmap
-    vendor_info = nm[ip_address].get("vendor", {})
-    if vendor_info:
-        vendor_name = list(vendor_info.values())[0]
+    # Further check the MAC address vendor for some devices like printers, routers, etc.
+    mac_address = nm[ip_address].get("addresses", {}).get("mac", "")
+    if mac_address:
+        vendor = get_vendor_from_mac(mac_address)
+        if vendor:
+            if "apple" in vendor.lower():
+                return "MacOS Laptop/Desktop"
+            if "samsung" in vendor.lower() or "xiaomi" in vendor.lower():
+                return "Mobile Device"
+            if "dell" in vendor.lower() or "hp" in vendor.lower():
+                return "Windows Laptop/Desktop"
+            if "lenovo" in vendor.lower():
+                return "Windows Laptop/Desktop"
 
-    return os_name, vendor_name, device_type, model_info
+    return device_type
+
+
+def get_vendor_from_mac(mac_address):
+    """Return the vendor name based on the MAC address (using a simple prefix lookup)."""
+    # Example of known MAC address prefixes for vendors (could be expanded)
+    mac_vendor_prefixes = {
+        "00:14:22": "HP",
+        "00:1A:2B": "Dell",
+        "00:21:5D": "Apple",
+        "B4:E6:2D": "Lenovo",
+        "00:19:66": "Samsung",
+        "00:1A:11": "Xiaomi",
+    }
+    mac_prefix = ":".join(mac_address.split(":")[:3]).upper()
+    return mac_vendor_prefixes.get(mac_prefix, None)
 
 
 def get_device_os(nm, ip_address):
-    """Get the operating system name from Nmap results if available."""
+    """Enhanced OS detection with more fallbacks."""
     try:
         if ip_address not in nm.all_hosts():
             return "Unknown OS"
@@ -132,6 +155,15 @@ def get_device_os(nm, ip_address):
         if os_matches:
             return os_matches[0].get("name", "Unknown OS")
 
+        # Additional fallback: check open ports to deduce the OS (more complex)
+        open_ports = nm[ip_address].get("tcp", {}).keys()
+        if 22 in open_ports:
+            return "Linux/Unix (SSH)"
+        if 3389 in open_ports:
+            return "Windows (RDP)"
+        if 80 in open_ports:
+            return "HTTP (Web Server)"
+
         return "Unknown OS"
     except Exception as e:
         print(f"Error detecting OS for {ip_address}: {e}")
@@ -139,7 +171,7 @@ def get_device_os(nm, ip_address):
 
 
 def scan_host(ip_address):
-    """Scan a single host and retrieve information."""
+    """Scan a single host and retrieve information, including device type."""
     nm = nmap.PortScanner()
 
     if ip_address == socket.gethostbyname(socket.gethostname()):
@@ -148,13 +180,12 @@ def scan_host(ip_address):
             "ip_address": ip_address,
             "mac_address": get_host_mac(),
             "device_type": "Host Device",
-            "device_model": "Host Model",
             "os": platform.system(),
         }
 
     try:
         print(f"Scanning host: {ip_address}")
-        nm.scan(ip_address, arguments="-A -T4 -O --osscan-guess")
+        nm.scan(ip_address, arguments="-A -T4 -O --osscan-guess --osscan-limit")
     except Exception as e:
         print(f"Scan failed for {ip_address}: {e}")
         return {
@@ -162,7 +193,6 @@ def scan_host(ip_address):
             "ip_address": ip_address,
             "mac_address": "N/A",
             "device_type": "N/A",
-            "device_model": "N/A",
             "os": "N/A",
         }
 
@@ -171,9 +201,10 @@ def scan_host(ip_address):
     if mac_address == "N/A":
         mac_address = retry_arp_for_missing_mac(ip_address)
 
-    os_name, vendor_name, device_type, model_info = parse_device_type_and_model(
-        nm, ip_address
-    )
+    # Use the improved device type parsing function
+    device_type = parse_device_type(nm, ip_address)
+
+    # Retrieve the device's operating system
     device_os = get_device_os(nm, ip_address)
 
     return {
@@ -181,7 +212,6 @@ def scan_host(ip_address):
         "ip_address": ip_address,
         "mac_address": mac_address,
         "device_type": device_type,
-        "device_model": model_info,
         "os": device_os,
     }
 
