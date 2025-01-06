@@ -83,7 +83,7 @@ export const menuItems = [
   { name: "dashboard", icon: <FaChartLine />, label: "Dashboard" },
   { name: "networkStatus", icon: <FaWifi />, label: "Network Status" },
   {
-    name: "deviceManagement",
+    name: "connectedDevices",
     icon: <FaMobileAlt />,
     label: "Connected Devices",
   },

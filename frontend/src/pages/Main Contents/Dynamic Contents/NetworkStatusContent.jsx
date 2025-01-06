@@ -2,6 +2,19 @@ import React, { useEffect, useState, useRef, useCallback } from "react";
 import axios from "axios";
 import { FaDownload, FaUpload, FaWifi } from "react-icons/fa";
 
+// Reusable NetworkStatCard component for consistent design
+const NetworkStatCard = ({ icon, label, value }) => (
+  <div className="shadow-lg px-6 py-4 rounded-lg flex items-center justify-between bg-transparent hover:bg-gray-600 transition-all">
+    <div className="flex items-center">
+      {icon}
+      <div className="ms-4">
+        <h4 className="text-lg font-semibold text-white">{label}</h4>
+        <p className="text-sm text-gray-400">{value ?? "Loading..."} mbps</p>
+      </div>
+    </div>
+  </div>
+);
+
 const NetworkStatusContent = () => {
   const [state, setState] = useState({
     networkStatus: null,
@@ -11,6 +24,7 @@ const NetworkStatusContent = () => {
   const [attempts, setAttempts] = useState(0);
   const intervalRef = useRef(null);
 
+  // Fetch network status
   const fetchNetworkStatus = useCallback(async () => {
     try {
       setState((prevState) => ({ ...prevState, error: null }));
@@ -92,50 +106,51 @@ const NetworkStatusContent = () => {
     upload_speed,
     ping,
     network_info = {},
-    bandwidth_usage = {},
-    total_bandwidth_usage = {},
   } = networkStatus;
 
   return (
     <div className="bg-transparent p-6">
+      {/* Header Section */}
+      <div className="bg-[#1F2937] shadow-md px-8 py-6 rounded-lg mb-8 max-w-full mx-auto">
+        <p className="text-sm text-gray-400 mt-2">
+          Welcome to your network status dashboard! Here, you can view real-time
+          data about your network performance and details.
+        </p>
+      </div>
+      {/* Header Section */}
+      <hr className="mb-6 border-t border-[#444]" />
       <h1 className="text-xl font-semibold text-[#00BFFF] mb-4">
         Status: <span className="font-semibold text-green-500">Online</span>
       </h1>
-      <hr className="mb-6 border-t border-[#444]" />
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
         {/* Network Speed Card */}
         <div className="bg-gray-800 shadow-md rounded-lg p-6">
-          <h2 className="text-xl font-semibold text-[#00BFFF] mb-4">
+          <h2 className="text-xl text-center font-semibold text-[#00BFFF] mb-4">
             Network Speed
           </h2>
           <div className="space-y-4 text-gray-400">
-            <div className="flex items-center space-x-3">
-              <FaDownload className="text-[#00BFFF]" />
-              <p>
-                <strong>Download Speed:</strong>{" "}
-                {download_speed?.toFixed(2) ?? "Loading..."} Mbps
-              </p>
-            </div>
-            <div className="flex items-center space-x-3">
-              <FaUpload className="text-[#00BFFF]" />
-              <p>
-                <strong>Upload Speed:</strong>{" "}
-                {upload_speed?.toFixed(2) ?? "Loading..."} Mbps
-              </p>
-            </div>
-            <div className="flex items-center space-x-3">
-              <FaWifi className="text-[#00BFFF]" />
-              <p>
-                <strong>Ping:</strong> {ping ?? "Loading..."} ms
-              </p>
-            </div>
+            <NetworkStatCard
+              icon={<FaDownload className="text-[#00BFFF]" />}
+              label="Download Speed"
+              value={download_speed?.toFixed(2) ?? "Loading..."} // Fallback for loading state
+            />
+            <NetworkStatCard
+              icon={<FaUpload className="text-[#00BFFF]" />}
+              label="Upload Speed"
+              value={upload_speed?.toFixed(2) ?? "Loading..."}
+            />
+            <NetworkStatCard
+              icon={<FaWifi className="text-[#00BFFF]" />}
+              label="Ping"
+              value={ping ?? "Loading..."}
+            />
           </div>
         </div>
 
         {/* Network Information Card */}
         <div className="bg-gray-800 shadow-md rounded-lg p-6">
-          <h2 className="text-xl font-semibold text-[#00BFFF] mb-4">
+          <h2 className="text-xl text-center font-semibold text-[#00BFFF] mb-6">
             Network Information
           </h2>
           <div className="space-y-2 text-gray-400">
@@ -153,10 +168,6 @@ const NetworkStatusContent = () => {
             </p>
             <p>
               <strong>IP Address:</strong> {network_info["IP"] ?? "Loading..."}
-            </p>
-            <p>
-              <strong>Router IP:</strong>{" "}
-              {network_info["Router IP"] ?? "Loading..."}
             </p>
           </div>
         </div>

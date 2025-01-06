@@ -17,9 +17,9 @@ const App = () => {
         <Route
           path="/main content"
           element={
-            <SignedIn>
+            // <SignedIn>
               <MainContent />
-            </SignedIn>
+            // </SignedIn>
           }
         />
         <Route path="*" element={<ErrorPage />} />

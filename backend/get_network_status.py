@@ -11,8 +11,8 @@ def _run_speedtest():
         st = speedtest.Speedtest()
         st.get_best_server()
 
-        download_speed = st.download() / 1_000_000  # Convert from bits/s to Mbps
-        upload_speed = st.upload() / 1_000_000  # Convert from bits/s to Mbps
+        download_speed = st.download() / 1_000_000
+        upload_speed = st.upload() / 1_000_000
         ping = st.results.ping
 
         return {

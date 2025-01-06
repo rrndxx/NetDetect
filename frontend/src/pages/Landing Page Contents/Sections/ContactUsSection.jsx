@@ -61,7 +61,7 @@ const ContactUsSection = () => {
             We'd love to hear from you! Whether you have questions, feedback, or
             simply want to connect, feel free to reach out. Our team is here to
             assist and ensure your experience with{" "}
-            <span className="text-green-500">NetDetect</span> is exceptional.
+            <span className="text-[#00BFFF] font-bold">NetDetect</span> is exceptional.
           </p>
         </div>
 

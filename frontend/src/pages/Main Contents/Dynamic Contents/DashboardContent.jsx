@@ -1,6 +1,24 @@
 import React, { useCallback, useState, useEffect, useRef } from "react";
 import axios from "axios";
-import { FaDownload, FaUpload, FaWifi } from "react-icons/fa";
+import {
+  FaDownload,
+  FaUpload,
+  FaWifi,
+  FaExclamationTriangle,
+} from "react-icons/fa";
+
+// Reusable NetworkStatCard component to handle Download, Upload, and Ping cards
+const NetworkStatCard = ({ icon, label, value }) => (
+  <div className="shadow-lg px-6 py-4 rounded-lg flex items-center justify-between bg-transparent hover:bg-gray-600 transition-all">
+    <div className="flex items-center">
+      {icon}
+      <div>
+        <h4 className="text-lg font-semibold text-white">{label}</h4>
+        <p className="text-sm text-gray-400">{value ?? "Loading..."} mbps</p>
+      </div>
+    </div>
+  </div>
+);
 
 const DashboardContent = () => {
   const [state, setState] = useState({
@@ -17,6 +35,7 @@ const DashboardContent = () => {
 
   const intervalRef = useRef(null);
 
+  // Fetch devices
   const fetchDevices = useCallback(async () => {
     try {
       setState((prevState) => ({ ...prevState, error: null }));
@@ -36,6 +55,7 @@ const DashboardContent = () => {
     }
   }, []);
 
+  // Fetch network status
   const fetchNetworkStatus = useCallback(async () => {
     try {
       setNetworkState((prevState) => ({ ...prevState, error: null }));
@@ -68,6 +88,7 @@ const DashboardContent = () => {
     }
   }, []);
 
+  // Effect hook to run fetch functions initially and periodically
   useEffect(() => {
     fetchDevices();
     fetchNetworkStatus();
@@ -87,73 +108,79 @@ const DashboardContent = () => {
   } = networkState;
 
   return (
-    <div className="grid grid-cols-1 gap-6 p-6">
-      {/* Status and Device Management */}
+    <div className="p-6">
+      {/* Header Section */}
+      <div className="bg-[#1F2937] shadow-md px-8 py-6 rounded-lg mb-8 max-w-full mx-auto">
+        <p className="text-sm text-gray-400 mt-2">
+          Welcome to your network dashboard! Here, you can view real-time data
+          about your connected devices and network performance.
+        </p>
+      </div>
+
+      {/* Status and Device Management Section */}
       <div className="flex flex-wrap gap-4">
-        <div className="bg-gray-800 shadow-md px-8 py-6 rounded-lg w-full sm:w-auto flex-grow">
+        <div className="bg-gray-800 shadow-md px-8 py-6 rounded-lg w-full sm:w-auto flex-grow flex flex-col items-center">
           <h3 className="text-xl font-semibold text-[#00BFFF]">
             Network Status
           </h3>
           <p className="text-sm text-gray-400">
-            Status: <span className="text-green-500">Online</span>
+            Status:{" "}
+            <span className={`text-${networkLoading ? "yellow" : "green"}-500`}>
+              {networkLoading ? "Loading..." : "Online"}
+            </span>
           </p>
+          {networkError && (
+            <div className="mt-2 text-red-500 text-sm flex items-center">
+              <FaExclamationTriangle className="me-2" />{" "}
+              <span>{networkError}</span>
+            </div>
+          )}
         </div>
-        <div className="bg-gray-800 shadow-md px-8 py-6 rounded-lg w-full sm:w-auto flex-grow">
+        <div className="bg-gray-800 shadow-md px-8 py-6 rounded-lg w-full sm:w-auto flex-grow flex flex-col items-center">
           <h3 className="text-xl font-semibold text-[#00BFFF]">
             Device Management
           </h3>
           <p className="text-sm text-gray-400">
-            Devices Connected: {connectedDevicesCount}
+            Devices Connected: {connectedDevicesCount || "No devices connected"}
           </p>
         </div>
       </div>
 
-      {/* Usage Stats */}
-      <div className="bg-gray-800 shadow-md px-8 py-6 rounded-lg w-full pb-12">
+      {/* Network Speed Stats Section */}
+      <div className="bg-gray-800 shadow-md px-8 py-6 rounded-lg w-full pb-12 mt-4">
         <h3 className="text-xl font-semibold text-[#00BFFF] mb-4 text-center">
           Network Speed Stats
         </h3>
         {networkLoading ? (
-          <p className="text-sm text-gray-400 text-center mb-10">Loading...</p>
+          <div className="text-sm text-gray-400 text-center mb-10">
+            Loading...
+          </div>
         ) : networkError ? (
-          <p className="text-sm text-red-500 text-center mb-10">
+          <div className="text-sm text-red-500 text-center mb-10">
             Error: {networkError}
-          </p>
+          </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
             {/* Download Card */}
-            <div className="shadow-lg px-6 py-4 rounded-lg flex items-center">
-              <FaDownload className="text-[#00BFFF] text-3xl me-4" />
-              <div>
-                <h4 className="text-lg font-semibold text-white">Download</h4>
-                <p className="text-sm text-gray-400">
-                  {networkStatus.download_speed?.toFixed(2) ?? "Loading..."}{" "}
-                  Mbps
-                </p>
-              </div>
-            </div>
+            <NetworkStatCard
+              icon={<FaDownload className="text-[#00BFFF] text-3xl me-4" />}
+              label="Download"
+              value={networkStatus.download_speed?.toFixed(2)}
+            />
 
             {/* Upload Card */}
-            <div className="shadow-lg px-6 py-4 rounded-lg flex items-center">
-              <FaUpload className="text-[#00BFFF] text-3xl me-4" />
-              <div>
-                <h4 className="text-lg font-semibold text-white">Upload</h4>
-                <p className="text-sm text-gray-400">
-                  {networkStatus.upload_speed?.toFixed(2) ?? "Loading..."} Mbps
-                </p>
-              </div>
-            </div>
+            <NetworkStatCard
+              icon={<FaUpload className="text-[#00BFFF] text-3xl me-4" />}
+              label="Upload"
+              value={networkStatus.upload_speed?.toFixed(2)}
+            />
 
             {/* Ping Card */}
-            <div className="shadow-lg px-6 py-4 rounded-lg flex items-center">
-              <FaWifi className="text-[#00BFFF] text-3xl me-4" />
-              <div>
-                <h4 className="text-lg font-semibold text-white">Ping</h4>
-                <p className="text-sm text-gray-400">
-                  {networkStatus.ping ?? "Loading..."} ms
-                </p>
-              </div>
-            </div>
+            <NetworkStatCard
+              icon={<FaWifi className="text-[#00BFFF] text-3xl me-4" />}
+              label="Ping"
+              value={networkStatus.ping ?? "Loading..."}
+            />
           </div>
         )}
       </div>

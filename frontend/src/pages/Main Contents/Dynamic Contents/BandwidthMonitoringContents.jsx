@@ -4,18 +4,19 @@ import { FaDownload, FaUpload } from "react-icons/fa";
 
 const BandwidthMonitoringContents = () => {
   const [state, setState] = useState({
-    networkStatus: null,
+    bandwidthUsage: null,
     loading: true,
     error: null,
   });
   const [attempts, setAttempts] = useState(0);
   const intervalRef = useRef(null);
 
-  const fetchNetworkStatus = useCallback(async () => {
+  // Fetch bandwidth usage data
+  const fetchBandwidthUsage = useCallback(async () => {
     try {
-      setState((prevState) => ({ ...prevState, error: null })); // Reset the error state
+      setState((prevState) => ({ ...prevState, error: null }));
       const response = await axios.get(
-        "http://localhost:5000/api/network-status"
+        "http://localhost:5000/api/bandwidth-usage"
       );
 
       if (response.status !== 200) {
@@ -25,7 +26,7 @@ const BandwidthMonitoringContents = () => {
       const data = response.data;
       if (data.status === "success") {
         setState({
-          networkStatus: data,
+          bandwidthUsage: data,
           loading: false,
           error: null,
         });
@@ -33,14 +34,14 @@ const BandwidthMonitoringContents = () => {
         if (attempts < 5) {
           setAttempts((prev) => prev + 1);
         } else {
-          throw new Error("Network status taking too long to fetch.");
+          throw new Error("Bandwidth usage taking too long to fetch.");
         }
       } else {
-        throw new Error(data.message || "Network status is unavailable.");
+        throw new Error(data.message || "Bandwidth usage is unavailable.");
       }
     } catch (error) {
       setState({
-        networkStatus: null,
+        bandwidthUsage: null,
         loading: false,
         error: error.message,
       });
@@ -48,25 +49,26 @@ const BandwidthMonitoringContents = () => {
   }, [attempts]);
 
   useEffect(() => {
-    fetchNetworkStatus();
-
+    fetchBandwidthUsage();
     intervalRef.current = setInterval(() => {
-      fetchNetworkStatus();
-    }, 10000);
+      fetchBandwidthUsage();
+    }, 10000); // Fetch every 10 seconds
 
-    return () => clearInterval(intervalRef.current);
-  }, [fetchNetworkStatus]);
+    return () => clearInterval(intervalRef.current); // Cleanup interval on component unmount
+  }, [fetchBandwidthUsage]);
 
-  const { networkStatus, loading, error } = state;
+  const { bandwidthUsage, loading, error } = state;
 
+  // Render loading state
   if (loading) {
     return (
       <h1 className="text-1xl text-center text-gray-400 animate-pulse">
-        Loading network status...
+        Loading bandwidth usage...
       </h1>
     );
   }
 
+  // Render error state
   if (error) {
     return (
       <div className="bg-transparent p-6">
@@ -77,28 +79,43 @@ const BandwidthMonitoringContents = () => {
     );
   }
 
-  if (!networkStatus) {
+  // Render empty state
+  if (!bandwidthUsage) {
     return (
       <div className="bg-transparent p-6">
         <p className="text-red-500 text-center">
-          Unable to retrieve network status.
+          Unable to retrieve bandwidth usage.
         </p>
       </div>
     );
   }
 
-  const { bandwidth_usage = {}, total_bandwidth_usage = {} } = networkStatus;
+  const {
+    download_usage,
+    upload_usage,
+    total_download_usage,
+    total_upload_usage,
+  } = bandwidthUsage;
 
   return (
-    <div className="p-6">
+    <div className="bg-transparent p-6">
+      {/* Header */}
+      <div className="bg-[#1F2937] shadow-md px-8 py-6 rounded-lg mb-8 max-w-full mx-auto">
+        <p className="text-sm text-gray-400 mt-2">
+          Welcome to your bandwidth usage dashboard! Here, you can view
+          real-time data about the bandwidth usage of your network.
+        </p>
+      </div>
+
+      {/* Title */}
+      <hr className="mb-6 border-t border-[#444]" />
       <h2 className="text-xl font-semibold text-[#00BFFF] mb-4">
         Bandwidth Monitoring
       </h2>
-      <hr className="mb-6 border-t border-[#444]" />
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-        {/* Current Bandwidth Usage */}
-        <div className="bg-gray-800 shadow-md rounded-lg p-14">
+        {/* Current Bandwidth Usage Card */}
+        <div className="bg-gray-800 shadow-md rounded-lg p-6">
           <h3 className="text-lg font-semibold text-[#00BFFF] mb-4">
             Current Bandwidth Usage
           </h3>
@@ -107,22 +124,21 @@ const BandwidthMonitoringContents = () => {
               <FaDownload className="text-[#00BFFF]" />
               <p>
                 <strong>Download:</strong>{" "}
-                {bandwidth_usage.download_usage?.toFixed(2) ?? "Loading..."}{" "}
-                MB/s
+                {download_usage?.toFixed(2) ?? "Loading..."} MB/s
               </p>
             </div>
             <div className="flex items-center space-x-3">
               <FaUpload className="text-[#00BFFF]" />
               <p>
                 <strong>Upload:</strong>{" "}
-                {bandwidth_usage.upload_usage?.toFixed(2) ?? "Loading..."} MB/s
+                {upload_usage?.toFixed(2) ?? "Loading..."} MB/s
               </p>
             </div>
           </div>
         </div>
 
-        {/* Total Bandwidth Usage */}
-        <div className="bg-gray-800 shadow-md rounded-lg p-14">
+        {/* Total Bandwidth Usage Card */}
+        <div className="bg-gray-800 shadow-md rounded-lg p-6">
           <h3 className="text-lg font-semibold text-[#00BFFF] mb-4">
             Total Bandwidth Usage
           </h3>
@@ -131,17 +147,14 @@ const BandwidthMonitoringContents = () => {
               <FaDownload className="text-[#00BFFF]" />
               <p>
                 <strong>Download:</strong>{" "}
-                {total_bandwidth_usage.download_usage?.toFixed(2) ??
-                  "Loading..."}{" "}
-                MB
+                {total_download_usage?.toFixed(2) ?? "Loading..."} MB
               </p>
             </div>
             <div className="flex items-center space-x-3">
               <FaUpload className="text-[#00BFFF]" />
               <p>
                 <strong>Upload:</strong>{" "}
-                {total_bandwidth_usage.upload_usage?.toFixed(2) ?? "Loading..."}{" "}
-                MB
+                {total_upload_usage?.toFixed(2) ?? "Loading..."} MB
               </p>
             </div>
           </div>
