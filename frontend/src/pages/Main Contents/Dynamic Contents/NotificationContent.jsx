@@ -3,15 +3,24 @@ import { useNotifications } from "../../../context/NotificationsContext";
 const NotificationsPage = () => {
   const { notifications } = useNotifications();
 
+  // Remove duplicates by ensuring the combination of message is unique
+  const uniqueNotifications = notifications.filter(
+    (notification, index, self) =>
+      index === self.findIndex((n) => n.message === notification.message)
+  );
+
+  // Reverse the notifications so the latest ones are on top
+  const sortedNotifications = [...uniqueNotifications].reverse();
+
   return (
     <div className="p-6">
       <div className="grid grid-cols-1 gap-6">
-        {notifications.length === 0 ? (
+        {sortedNotifications.length === 0 ? (
           <p className="col-span-full text-sm text-gray-400 text-center">
             No notifications to display.
           </p>
         ) : (
-          notifications.map((notification, index) => (
+          sortedNotifications.map((notification, index) => (
             <div
               key={index}
               className="shadow-lg rounded-lg p-4 flex items-start gap-4"

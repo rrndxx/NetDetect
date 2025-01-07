@@ -27,6 +27,7 @@ const TableRow = ({ device }) => (
 const DeviceManagementContents = () => {
   const [state, setState] = useState({
     devices: [],
+    allDevices: [], // This will store all detected devices
     loading: true,
     error: null,
   });
@@ -42,7 +43,7 @@ const DeviceManagementContents = () => {
       device_hostname: newDevice.hostname || "Unknown",
       device_type: newDevice.device_type || "Unknown",
       device_os: newDevice.os || "Unknown",
-    };  
+    };
 
     // Send email via EmailJS asynchronously
     // emailjs
@@ -82,19 +83,23 @@ const DeviceManagementContents = () => {
         sendEmailNotification(newDevice);
       });
 
+      // Add new devices to the notifications system
       newDevicesList.forEach((newDevice) => {
         addNotification({
-          message: `Detected new device: ${newDevice.hostname || "Unknown"} (${newDevice.ip_address})`,
+          message: `Detected new device: ${newDevice.hostname || "Unknown"} (${
+            newDevice.ip_address
+          })`,
           timestamp: new Date().toISOString(),
         });
       });
 
-      // Update state with the new list of devices
-      setState({
-        devices: newDevices,
+      // Update state: merge new devices into the `allDevices` list
+      setState((prevState) => ({
+        devices: newDevices, // Update with the latest devices detected
+        allDevices: [...prevState.allDevices, ...newDevicesList], // Append new devices to the allDevices list
         loading: false,
         error: null,
-      });
+      }));
 
       // Update previous devices reference to current devices
       prevDevicesRef.current = newDevices;
@@ -110,12 +115,12 @@ const DeviceManagementContents = () => {
 
   useEffect(() => {
     fetchDevices();
-    const intervalId = setInterval(fetchDevices, 60000); // Fetch devices every 60 seconds  
+    const intervalId = setInterval(fetchDevices, 60000); // Fetch devices every 60 seconds
 
     return () => clearInterval(intervalId);
   }, [fetchDevices]);
 
-  const { devices, loading, error } = state;
+  const { devices, loading, error, allDevices } = state;
 
   if (loading) {
     return (
@@ -142,8 +147,8 @@ const DeviceManagementContents = () => {
       {/* Header Section */}
       <div className="bg-[#1F2937] shadow-md px-8 py-6 rounded-lg mb-8 max-w-full mx-auto">
         <p className="text-sm text-gray-400 mt-2">
-          Welcome to your Connected Devices Dashboard! Here, you can view real-time data
-          about all connected devices.
+          Welcome to your Connected Devices Dashboard! Here, you can view
+          real-time data about all connected devices.
         </p>
       </div>
       <hr className="mb-6 border-t border-[#444]" />
@@ -170,7 +175,7 @@ const DeviceManagementContents = () => {
               </tr>
             </thead>
             <tbody>
-              {devices.map((device, index) => (
+              {allDevices.map((device, index) => (
                 <TableRow key={index} device={device} />
               ))}
             </tbody>
