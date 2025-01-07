@@ -1,5 +1,10 @@
 import React, { useState } from "react";
-import { SignInButton } from "@clerk/clerk-react";
+import {
+  SignedIn,
+  SignedOut,
+  SignInButton,
+  SignOutButton,
+} from "@clerk/clerk-react";
 import HeroSection from "./Landing Page Contents/Sections/HeroSection";
 import FeatureSection from "./Landing Page Contents/Sections/FeatureSection";
 import BenefitsSection from "./Landing Page Contents/Sections/BenefitsSection";
@@ -57,11 +62,20 @@ const LandingPage = () => {
                 Contact
               </a>
             </div>
-            <SignInButton forceRedirectUrl={"/main content"} mode="modal">
-              <button className="bg-gradient-to-r from-blue-500 to-blue-700 text-gray-900 px-6 py-3 rounded-md shadow-lg text-lg sm:text-xl hover:scale-105 transition duration-200">
-                Login
-              </button>
-            </SignInButton>
+            <SignedOut>
+              <SignInButton forceRedirectUrl={"/main content"} mode="modal">
+                <button className="bg-gradient-to-r from-blue-500 to-blue-700 text-gray-900 px-6 py-3 rounded-md shadow-lg text-lg sm:text-xl hover:scale-105 transition duration-200">
+                  Login
+                </button>
+              </SignInButton>
+            </SignedOut>
+            <SignedIn>
+              <SignOutButton redirectUrl="/">
+                <button className="bg-red-500 text-white px-6 py-3 rounded-md shadow-lg text-lg hover:bg-red-600 sm:text-xl hover:scale-105 transition duration-200">
+                  Logout
+                </button>
+              </SignOutButton>
+            </SignedIn>
           </div>
           <button
             className="md:hidden text-white text-3xl"
@@ -116,11 +130,20 @@ const LandingPage = () => {
             >
               Contact Us
             </a>
-            <SignInButton forceRedirectUrl={"/main content"} mode="modal">
-              <button className="bg-gradient-to-r from-blue-500 to-blue-700 text-gray-900 px-6 py-3 rounded-lg text-lg hover:scale-105 transition duration-200">
-                Login
-              </button>
-            </SignInButton>
+            <SignedOut>
+              <SignInButton forceRedirectUrl={"/main content"} mode="modal">
+                <button className="bg-gradient-to-r from-blue-500 to-blue-700 text-gray-900 px-6 py-3 rounded-lg text-lg hover:scale-105 transition duration-200">
+                  Login
+                </button>
+              </SignInButton>
+            </SignedOut>
+            <SignedIn>
+              <SignOutButton redirectUrl="/">
+                <button className="bg-red-500 text-white px-6 py-3 rounded-lg text-lg hover:bg-red-600 hover:scale-105 transition duration-200">
+                  Logout
+                </button>
+              </SignOutButton>
+            </SignedIn>
           </div>
         </div>
       )}
