@@ -45,21 +45,21 @@ const DeviceManagementContents = () => {
     };  
 
     // Send email via EmailJS asynchronously
-    emailjs
-      .send(
-        // import.meta.env.VITE_EMAILJS_SERVICE_ID,
-        // import.meta.env.VITE_EMAILJS_TEMPLATE_ID2,
-        // templateParams,
-        // import.meta.env.VITE_EMAILJS_USER_ID
-      )
-      .then(
-        (response) => {
-          console.log("Email sent successfully:", response);
-        },
-        (error) => {
-          console.error("Error sending email:", error);
-        }
-      );
+    // emailjs
+    //   .send(
+    //     import.meta.env.VITE_EMAILJS_SERVICE_ID,
+    //     import.meta.env.VITE_EMAILJS_TEMPLATE_ID2,
+    //     templateParams,
+    //     import.meta.env.VITE_EMAILJS_USER_ID
+    //   )
+    //   .then(
+    //     (response) => {
+    //       console.log("Email sent successfully:", response);
+    //     },
+    //     (error) => {
+    //       console.error("Error sending email:", error);
+    //     }
+    //   );
   };
 
   // Fetch device data
@@ -84,7 +84,7 @@ const DeviceManagementContents = () => {
 
       newDevicesList.forEach((newDevice) => {
         addNotification({
-          message: `New device connected: ${newDevice.hostname || "Unknown"} (${newDevice.ip_address})`,
+          message: `Detected new device: ${newDevice.hostname || "Unknown"} (${newDevice.ip_address})`,
           timestamp: new Date().toISOString(),
         });
       });
