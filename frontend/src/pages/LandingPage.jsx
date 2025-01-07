@@ -6,17 +6,22 @@ import BenefitsSection from "./Landing Page Contents/Sections/BenefitsSection";
 import Footer from "./Landing Page Contents/Sections/Footer";
 import AboutSection from "./Landing Page Contents/Sections/AboutSection";
 import ContactUsSection from "./Landing Page Contents/Sections/ContactUsSection";
+import { useNavigate } from "react-router-dom";
 
 const LandingPage = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const toggleMenu = () => setMenuOpen((prev) => !prev);
+  const navigate = useNavigate();
 
   return (
     <div className="bg-gradient-to-r from-gray-800 to-gray-900 text-white min-h-screen flex flex-col scroll-smooth">
       {/* Navigation */}
       <nav className="bg-transparent p-4 sm:px-6 lg:px-8 sticky top-0 z-20 transition-all duration-300 backdrop-blur-md">
         <div className="container mx-auto flex justify-between items-center">
-          <h1 className="text-3xl ms-4 tracking-wide text-[#00BFFF]">
+          <h1
+            className="text-3xl ms-4 tracking-wide text-[#00BFFF] cursor-pointer"
+            onClick={() => navigate("/")}
+          >
             NetDetect
           </h1>
           <div className="hidden md:flex items-center space-x-10">

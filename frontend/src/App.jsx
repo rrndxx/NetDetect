@@ -25,6 +25,7 @@ const App = () => {
             </SignedIn>
           }
         />
+        <Route path="/errorpage" element={<ErrorPage />} />
         <Route path="*" element={<ErrorPage />} />
       </Routes>
     </Router>
