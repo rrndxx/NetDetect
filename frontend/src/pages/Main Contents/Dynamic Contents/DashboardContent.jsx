@@ -125,8 +125,8 @@ const DashboardContent = () => {
           </h3>
           <p className="text-sm text-gray-400">
             Status:{" "}
-            <span className={`text-${networkLoading ? "yellow" : "green"}-500`}>
-              {networkLoading ? "Loading..." : "Online"}
+            <span className={`text-${networkError ? "yellow" : "green"}-500`}>
+              {networkError ? "Offline" : "Online"}
             </span>
           </p>
           {networkError && (
