@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import { FaSignOutAlt } from "react-icons/fa";
 import { menuItems } from "../constants/constants.jsx";
 import { SignOutButton } from "@clerk/clerk-react";
+import { useNavigate } from "react-router-dom";
 
 const Sidebar = ({ onMenuClick, activeMenu, toggleSidebar, sidebarOpen }) => {
   const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const navigate = useNavigate();
 
   return (
     <>
@@ -20,7 +22,7 @@ const Sidebar = ({ onMenuClick, activeMenu, toggleSidebar, sidebarOpen }) => {
           sidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
         }`}
       >
-        <h2 className="text-2xl font-semibold text-[#00BFFF] mb-6 mt-2 text-center">
+        <h2 className="text-2xl font-semibold text-[#00BFFF] mb-6 mt-2 text-center cursor-pointer" onClick={() => navigate("/")}>
           NetDetect
         </h2>
 

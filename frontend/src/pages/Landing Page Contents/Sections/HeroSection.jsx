@@ -1,4 +1,4 @@
-import { SignInButton } from "@clerk/clerk-react";
+import { SignedIn, SignedOut, SignInButton } from "@clerk/clerk-react";
 import { useNavigate } from "react-router-dom";
 
 const HeroSection = () => {
@@ -15,11 +15,21 @@ const HeroSection = () => {
           Secure, manage, and monitor your networks with powerful tools, all
           from a single platform.
         </p>
-        <SignInButton forceRedirectUrl={"/main content"} mode="modal">
-          <button className="bg-gradient-to-r from-blue-500 to-blue-800 text-gray-900 px-8 py-4 rounded-md shadow-xl text-lg sm:text-xl transform transition-all duration-300 hover:scale-125 hover:animate-none">
-            Get Started
+        <SignedOut>
+          <SignInButton forceRedirectUrl={"/main content"} mode="modal">
+            <button className="bg-gradient-to-r from-blue-500 to-blue-800 text-gray-900 px-8 py-4 rounded-md shadow-xl text-lg sm:text-xl transform transition-all duration-300 hover:scale-125 hover:animate-none">
+              Get Started
+            </button>
+          </SignInButton>
+        </SignedOut>
+        <SignedIn>
+          <button
+            className="bg-[#00BFFF] text-white px-8 py-4 font-semibold rounded-md shadow-xl text-lg sm:text-xl transform transition-all duration-300 hover:scale-125 hover:animate-none"
+            onClick={() => navigate("/main content")}
+          >
+            Go to Dashboard
           </button>
-        </SignInButton>
+        </SignedIn>
       </div>
     </section>
   );
