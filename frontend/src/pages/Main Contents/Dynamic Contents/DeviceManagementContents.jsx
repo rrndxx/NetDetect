@@ -32,6 +32,7 @@ const DeviceManagementContents = () => {
     error: null,
   });
   const prevDevicesRef = useRef([]);
+  const notifiedDevicesRef = useRef(new Set()); // To track notified devices by mac_address
   const { addNotification } = useNotifications();
 
   // Function to send email via EmailJS
@@ -45,22 +46,26 @@ const DeviceManagementContents = () => {
       device_os: newDevice.os || "Unknown",
     };
 
-    // Send email via EmailJS asynchronously
-    // emailjs
-    //   .send(
-    //     import.meta.env.VITE_EMAILJS_SERVICE_ID,
-    //     import.meta.env.VITE_EMAILJS_TEMPLATE_ID2,
-    //     templateParams,
-    //     import.meta.env.VITE_EMAILJS_USER_ID
-    //   )
-    //   .then(
-    //     (response) => {
-    //       console.log("Email sent successfully:", response);
-    //     },
-    //     (error) => {
-    //       console.error("Error sending email:", error);
-    //     }
-    //   );
+    // Check if the device has already been notified
+    if (!notifiedDevicesRef.current.has(newDevice.mac_address)) {
+      // Send email via EmailJS asynchronously
+      // emailjs
+      //   .send(
+      //     import.meta.env.VITE_EMAILJS_SERVICE_ID,
+      //     import.meta.env.VITE_EMAILJS_TEMPLATE_ID2,
+      //     templateParams,
+      //     import.meta.env.VITE_EMAILJS_USER_ID
+      //   )
+      //   .then(
+      //     (response) => {
+      //       console.log("Email sent successfully:", response);
+      //       notifiedDevicesRef.current.add(newDevice.mac_address);
+      //     },
+      //     (error) => {
+      //       console.error("Error sending email:", error);
+      //     }
+      //   );
+    }
   };
 
   // Fetch device data
