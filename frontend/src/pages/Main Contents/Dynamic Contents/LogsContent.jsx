@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
+import { useLogs } from "../../../context/LogsContext";
 
 const LogsPage = () => {
-  const [logs, setLogs] = useState([]);
+  const { logs } = useLogs();
 
   return (
     <div className="p-6">
@@ -12,20 +13,14 @@ const LogsPage = () => {
         </p>
       ) : (
         <ul className="space-y-4">
-          {logs.map((log) => (
+          {logs.map((log, index) => (
             <li
-              key={log.id}
+              key={index}
               className="px-4 py-3 rounded-lg shadow hover:bg-gray-700"
             >
               <div className="flex justify-between items-center">
-                <h4 className="text-lg font-semibold text-white">
-                  {log.action}
-                </h4>
-                <p className="text-sm text-gray-500">
-                  {new Date(log.timestamp).toLocaleString()}
-                </p>
+                <p className="text-sm text-gray-500">{log}</p>
               </div>
-              <p className="text-sm text-gray-400 mt-2">{log.details}</p>
             </li>
           ))}
         </ul>

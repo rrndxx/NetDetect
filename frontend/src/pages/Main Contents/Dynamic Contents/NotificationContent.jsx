@@ -1,7 +1,9 @@
 import { useNotifications } from "../../../context/NotificationsContext";
+import { FaTrash } from "react-icons/fa"; 
 
 const NotificationsPage = () => {
-  const { notifications } = useNotifications();
+  const { notifications, clearNotifications, deleteNotification } =
+    useNotifications();
 
   // Remove duplicates by ensuring the combination of message is unique
   const uniqueNotifications = notifications.filter(
@@ -14,6 +16,18 @@ const NotificationsPage = () => {
 
   return (
     <div className="p-6">
+      {/* Clear All Notifications */}
+      <div className="mb-4 flex justify-end">
+        {sortedNotifications.length > 0 && (
+          <p
+            onClick={clearNotifications}
+            className="text-xs text-white px-4 py-2 rounded-lg shadow cursor-pointer"
+          >
+            Clear All Notifications
+          </p>
+        )}
+      </div>
+
       <div className="grid grid-cols-1 gap-6">
         {sortedNotifications.length === 0 ? (
           <p className="col-span-full text-sm text-gray-400 text-center">
@@ -23,7 +37,7 @@ const NotificationsPage = () => {
           sortedNotifications.map((notification, index) => (
             <div
               key={index}
-              className="shadow-lg rounded-lg p-4 flex items-start gap-4"
+              className="shadow-lg rounded-lg p-4 flex items-start justify-between gap-4"
             >
               {/* Details */}
               <div>
@@ -41,6 +55,15 @@ const NotificationsPage = () => {
                     : "Invalid Date"}
                 </p>
               </div>
+
+              {/* Delete Button */}
+              <button
+                onClick={() => deleteNotification(notification)}
+                className="text-red-500 hover:text-red-600 transition"
+                aria-label="Delete notification"
+              >
+                <FaTrash />
+              </button>
             </div>
           ))
         )}

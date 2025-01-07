@@ -3,10 +3,16 @@ import { FaSignOutAlt } from "react-icons/fa";
 import { menuItems } from "../constants/constants.jsx";
 import { SignOutButton } from "@clerk/clerk-react";
 import { useNavigate } from "react-router-dom";
+import { useLogs } from "../context/LogsContext";
 
 const Sidebar = ({ onMenuClick, activeMenu, toggleSidebar, sidebarOpen }) => {
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const navigate = useNavigate();
+  const { addLogs } = useLogs();
+
+  const handleSignoutSuccess = () => {
+    addLogs("You logged out at " + new Date().toLocaleString());
+  };
 
   return (
     <>
@@ -68,7 +74,7 @@ const Sidebar = ({ onMenuClick, activeMenu, toggleSidebar, sidebarOpen }) => {
               >
                 Cancel
               </button>
-              <SignOutButton redirectUrl="/">
+              <SignOutButton redirectUrl="/" afterSignOut={() => handleSignoutSuccess()}>
                 <button className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">
                   Logout
                 </button>
